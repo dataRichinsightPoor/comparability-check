@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="What can binding EC50 values establish? Explore historical confounding and paired crossed-method comparisons.">
+  <title>Comparability Check | 99 Small Problems in Bioassay</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=zodiak@400,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to model</a>
+<header class="masthead">
+  <span class="brand">Data-Rich, Insight-Poor</span>
+  <span class="series">99 SMALL PROBLEMS IN BIOASSAY</span>
+  <span class="version">v0.1.0 · Research tool</span>
+</header>
+<main id="main">
+  <section class="intro">
+    <div><p class="eyebrow">COMPARABILITY CHECK</p><h1>To be or not to be comparable.</h1>
+    <p class="lede">Two lots. Two methods. Which conclusion does the evidence support?</p></div>
+    <div class="toolbar">
+      <button id="export-settings" class="quiet">Save settings</button>
+      <label class="button quiet" for="import-settings">Load settings</label>
+      <input id="import-settings" type="file" accept=".json,application/json" class="file-input">
+    </div>
+  </section>
+  <p id="file-status" role="status" class="small"></p>
+  <nav class="tabs" aria-label="Model views">
+    <button data-view="history" aria-pressed="true">Historical contrast</button>
+    <button data-view="bridge" aria-pressed="false">Crossed bridge</button>
+    <button data-view="methods" aria-pressed="false">Methods &amp; limits</button>
+  </nav>
+
+  <section id="history" class="view">
+    <div class="workspace">
+      <aside class="controls">
+        <p class="eyebrow">THE OBSERVED COMPARISON</p><h2>Two measured corners</h2>
+        <p class="small">Start with two historical EC50 values in the same unit. The example is synthetic rituximab–Raji, not real lot data.</p>
+        <div class="matrix">
+          <span></span><span>Method P<br><small>Earlier</small></span><span>Method Q<br><small>Later</small></span>
+          <strong>Lot A</strong><label><span class="sr-only">Earlier EC50, lot A method P</span><input id="earlier" type="number" min="0.000001" step="any" value="4"><small>EC50 · nM</small></label><span class="missing">Not measured</span>
+          <strong>Lot B</strong><span class="missing">Not measured</span><label><span class="sr-only">Later EC50, lot B method Q</span><input id="later" type="number" min="0.000001" step="any" value="1"><small>EC50 · nM</small></label>
+        </div>
+        <label class="unit-label">Common unit <input id="unit" type="text" value="nM" maxlength="24"></label>
+        <div class="rule"></div>
+        <label for="multiplier"><strong>Assumed method multiplier</strong><span class="small">Q / P, holding lot fixed</span></label>
+        <div class="range-value"><span id="multiplier-label">1.00×</span><span class="small">assumption, not a measurement</span></div>
+        <input id="multiplier" type="range" min="-4" max="4" step="0.05" value="0" aria-label="Log2 assumed method multiplier">
+        <div class="range-ends"><span>1/16×</span><span>1×</span><span>16×</span></div>
+        <div class="scenario-buttons"><button data-m="1">No method shift</button><button data-m=".25">Method-only example</button><button data-m=".125">Masked lot increase</button></div>
+        <p class="small">The slider explores compatible explanations. It does not estimate, bound, or correct the actual method effect.</p>
+      </aside>
+      <div class="results" aria-live="polite">
+        <div id="history-error" class="error" role="alert" hidden></div>
+        <div id="history-output">
+          <div class="verdict"><span class="status-label">DESCRIPTIVE COMPARISON ONLY</span><h2>The numbers differ.<br>The lot effect is unresolved.</h2><p id="history-statement"></p></div>
+          <div class="equation-strip">
+            <div><span class="small">Observed ratio B,Q / A,P</span><strong id="observed"></strong></div>
+            <span class="operator">=</span>
+            <div><span class="small">Conditional lot ratio B / A</span><strong id="conditional"></strong></div>
+            <span class="operator">×</span>
+            <div><span class="small">Assumed method ratio Q / P</span><strong id="assumed"></strong></div>
+          </div>
+          <figure><figcaption><strong>One observation, many explanations</strong><span class="small">Every point on the line has the same observed ratio.</span></figcaption><div id="history-chart" class="chart"></div></figure>
+          <div class="claim-pair"><section><h3>We can say</h3><p id="can-say"></p></section><section><h3>We cannot say</h3><p>The lot changed by this amount, intrinsic affinity improved, or the lots are equivalent.</p></section></div>
+          <p class="next"><strong>The missing measurement:</strong> test both available lots within one method. To assess transfer across methods, test all four lot–method combinations in a new bridge.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="bridge" class="view" hidden>
+    <div class="workspace">
+      <aside class="controls">
+        <p class="eyebrow">THE CROSSED EXPERIMENT</p><h2>Fill all four corners</h2>
+        <label for="preset">Synthetic example</label>
+        <select id="preset"><option value="common">Common method shift</option><option value="interaction">Lot-by-method interaction</option><option value="imprecise">Similar estimates, wide uncertainty</option></select>
+        <label for="csv">Run-level EC50 data</label>
+        <p class="small">AP = lot A, method P. One row is one independent, complete experimental block with all four combinations. Do not pair unrelated historical runs or enter technical wells as independent blocks.</p>
+        <textarea id="csv" spellcheck="false" rows="8" aria-describedby="csv-help"></textarea>
+        <p id="csv-help" class="small">Exact positive values, one common unit. Missing or censored values are rejected; no rows are silently dropped.</p>
+        <button id="download-csv" class="quiet">Download current CSV</button>
+        <fieldset><legend>Lot-ratio equivalence margins</legend><div class="pair-inputs"><label>Lower<input id="lower" type="number" step="any" value=".8"></label><label>Upper<input id="upper" type="number" step="any" value="1.25"></label></div></fieldset>
+        <fieldset><legend>Interaction-ratio margins</legend><div class="pair-inputs"><label>Lower<input id="ilower" type="number" step="any" value=".8"></label><label>Upper<input id="iupper" type="number" step="any" value="1.25"></label></div></fieldset>
+        <p class="small">0.80–1.25 is an illustrative setting, not a recommended bioassay acceptance range. Justify each margin separately before collecting confirmatory data.</p>
+        <label class="check"><input id="qualified" type="checkbox"><span>I have independently established assay suitability, valid independent blocks, and justified, prespecified margins for this analysis.</span></label>
+        <p class="small">This declaration is not software validation of your assay. Editing margins resets it.</p>
+      </aside>
+      <div class="results" aria-live="polite">
+        <div id="bridge-error" class="error" role="alert" hidden></div>
+        <div id="bridge-output">
+          <div class="verdict"><span class="status-label" id="bridge-status"></span><h2>Compare within methods.<br>Then compare the contrasts.</h2><p id="bridge-summary"></p></div>
+          <figure><figcaption><strong>Geometric EC50 ratios with 90% confidence intervals</strong><span class="small">B/A below 1 means a lower measured EC50 for lot B. Shaded bands show your margins.</span></figcaption><div id="bridge-chart" class="chart"></div></figure>
+          <div id="bridge-table" class="table-wrap"></div>
+          <p class="small">Intervals use paired log contrasts and Student t with n−1 degrees of freedom. Interaction = (B/A under Q) / (B/A under P), calculated within each block to preserve covariance.</p>
+          <div class="claim-pair"><section><h3>Supported scope</h3><p>Within-method lot contrasts and their method dependence, for the tested present-day materials and conditions.</p></section><section><h3>Not established</h3><p>Intrinsic affinity, original manufacturing quality, historical sample state, or universal method interchangeability.</p></section></div>
+          <p id="bridge-warning" class="next"></p>
+          <button id="download-report">Export analysis report</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="methods" class="view methods" hidden>
+    <p class="eyebrow">INSPECT THE ASSUMPTIONS</p><h2>Comparable for which conclusion?</h2>
+    <p>This is a bounded comparison model, not a dose-response fitter or a regulatory validation system. It works on already estimated EC50 values and keeps biological validity separate from numerical calculation.</p>
+    <div class="method-grid">
+      <section><h3>Historical contrast</h3><p>The teaching model is E(lot, method) = θ(lot) × m(method). Two diagonal observations determine only the product of the lot ratio and method ratio. Slider values are sensitivity scenarios; no distribution or plausible bound for the method effect is inferred.</p><p>Method-by-lot interactions, sample aging, and era effects can make this simple separation inadequate. More precise diagonal measurements cannot fill the missing comparisons.</p></section>
+      <section><h3>Crossed bridge</h3><p>For block i, dP = ln(BP) − ln(AP), dQ = ln(BQ) − ln(AQ), and dI = dQ − dP. Each estimate is exp(mean(d)); its interval is exp(mean(d) ± t × SD(d)/√n).</p><p>The model requires independent blocks and approximately normal block-level log contrasts. It does not model unequal fit precision, outliers, raw-curve error, missing cells, or unpaired designs. Small n can give unreliable intervals if those assumptions fail.</p></section>
+      <section><h3>Equivalence is endpoint-specific</h3><p>A 90% interval strictly inside justified, prespecified margins corresponds to a two-one-sided equivalence test at α = 0.05 (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5502906/" target="_blank" rel="noopener">Lakens, 2017</a>). The 95% intervals are provided separately in the table; a nonsignificant difference is not an equivalence result.</p><p>Decisions are per contrast, not a multiplicity-adjusted family of independent claims. Zero observed contrast variation or only one block withholds uncertainty and equivalence. The tool never declares whole-product biosimilarity.</p></section>
+      <section><h3>Why EC50 is not automatically affinity</h3><p>Live-cell endpoint estimates depend on equilibrium and receptor-concentration conditions (<a href="https://link.springer.com/article/10.1007/s00249-021-01560-2" target="_blank" rel="noopener">Spiegelberg et al., 2021</a>). Rituximab binding on Daudi cells also shows bivalent stabilization and concentration-dependent dynamics (<a href="https://doi.org/10.1080/19420862.2020.1792673" target="_blank" rel="noopener">Bondza et al., 2020</a>).</p><p>Those observations motivate caution; they do not supply a correction factor for your assay. A retained old vial represents its current state, not automatically its state at original testing.</p></section>
+      <section><h3>References help under tested conditions</h3><p>A common rituximab reference improved cross-laboratory agreement, with limited cell-binding data and checks on dose-response similarity (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5836816/" target="_blank" rel="noopener">Prior et al., 2018</a>). That finding does not authorize arbitrary normalization across unbridged methods.</p><p>Reference normalization is not implemented here. Do not substitute reference-normalized potency values for EC50 without redefining the endpoint and its direction.</p></section>
+      <section><h3>Data and reproducibility</h3><p>All supplied examples are synthetic. Rituximab–Raji is a published assay pairing (<a href="https://www.tandfonline.com/doi/full/10.1080/19420862.2019.1578147" target="_blank" rel="noopener">Xu et al., 2019</a>), but none of this model's numerical inputs is extracted from that study.</p><p>Your entries are processed in this browser, not uploaded or persisted. Save a settings JSON to retain them. Font loading is external; the model has no external calculation dependency.</p></section>
+    </div>
+  </section>
+</main>
+<footer><span>Comparability Check · v0.1.0 · MIT</span><a href="https://github.com/dataRichinsightPoor/comparability-check" target="_blank" rel="noopener">Inspect code &amp; tests on GitHub</a><span>Software verification ≠ biological validation.</span></footer>
+</body>
+</html>

@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Please cite this software when using the model."
+title: "Comparability Check: To Be or Not to Be Comparable"
+authors:
+  - name: "Data-Rich, Insight-Poor"
+version: 0.1.0
+date-released: 2026-10-17
+license: MIT
+repository-code: "https://github.com/dataRichinsightPoor/comparability-check"
+abstract: "A bounded, inspectable model for historical and crossed-method binding EC50 comparisons."
