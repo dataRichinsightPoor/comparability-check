@@ -16,7 +16,8 @@ function nonnegative(x,name){
   if(typeof x!=="number"||!Number.isFinite(x)||x<0)throw new Error(`${name} must be finite and nonnegative.`);
   return x;
 }
-export function validateContext(input){
+export function validateContext(input={}){
+  if(input===null||typeof input!=="object"||Array.isArray(input))throw new Error("Cell-context settings must be an object.");
   const s={...CONTEXT_DEFAULTS,...input};
   nonnegative(s.passage,"Passage");
   if(s.passage>200)throw new Error("Passage must not exceed 200.");
@@ -113,7 +114,9 @@ export function analyzeContext(input={}){
     const competitionIC50=cell.rt>0?midpoint(c=>doseValues(c,s,cell).competition,s.kd+s.tracer+cell.rt):null;
     const functionalIC50=cell.rt>0?midpoint(c=>doseValues(c,s,cell).functional,s.kd+s.tracer+cell.rt):null;
     const tracerDepletion=cell.rt>0&&s.depletion?competitionState(0,s.tracer,s.kd,cell.rt,true).boundTracer/s.tracer:0;
-    states[kind]={...cell,bindingEC50,competitionIC50,functionalIC50,baselineTracer:base.tracerSignal,baselineReporter:base.reporterSignal,tracerDepletion};
+    const bindingDepletionFraction=cell.rt/(2*s.kd+cell.rt);
+    const exactBaselineTracerDepletion=cell.rt>0?competitionState(0,s.tracer,s.kd,cell.rt,true).boundTracer/s.tracer:0;
+    states[kind]={...cell,bindingEC50,competitionIC50,functionalIC50,baselineTracer:base.tracerSignal,baselineReporter:base.reporterSignal,tracerDepletion,bindingDepletionFraction,exactBaselineTracerDepletion};
   }
   const r=states.raji;
   for(const cell of Object.values(states)){

@@ -1,0 +1,16 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {auditComparison,validateAudit,CLAIM_LABELS} from "../web/audit-model.mjs";
+const complete={design:"crossed",units:"yes",curves:"yes",cells:"matched",expression:"tracked"};
+test("default audit does not identify a lot effect",()=>{const r=auditComparison();assert.match(r.status,/NOT ESTABLISHED/);assert.ok(r.gaps.some(x=>x.includes("historical")));});
+test("well-declared lot comparison still not a result",()=>{const r=auditComparison(complete);assert.equal(r.gaps.length,0);assert.match(r.statement,/not a result/);});
+test("unknown never equals yes",()=>assert.ok(auditComparison({...complete,units:"unknown"}).gaps.length>0));
+test("different endpoints block lot equivalence",()=>{const r=auditComparison({...complete,claim:"equivalence",endpointB:"functional"});assert.equal(r.sameEndpoint,false);assert.match(r.gaps[0],/Endpoint identity/);});
+test("same concentration units do not repair endpoint mismatch",()=>assert.ok(auditComparison({...complete,endpointB:"competition"}).gaps.length>0));
+test("same endpoint still requires supported curves",()=>assert.ok(auditComparison({...complete,curves:"no"}).gaps.some(x=>x.includes("midpoint"))));
+test("crossed transfer is a design assessment not universal equivalence",()=>{const r=auditComparison({...complete,claim:"transfer"});assert.match(r.status,/DESIGN MAY/);assert.equal(r.route,"bridge");});
+test("side-by-side design alone cannot assess transfer",()=>assert.ok(auditComparison({...complete,claim:"transfer",design:"sideBySide"}).gaps.some(x=>x.includes("crossed"))));
+test("cell phenotype not inferred when untracked",()=>assert.ok(auditComparison({...complete,claim:"cell",expression:"untracked"}).gaps.some(x=>x.includes("Positive fraction"))));
+for(const claim of ["affinity","integration","function","equivalence"])test(`no automatic ${claim} approval`,()=>assert.match(auditComparison({...complete,claim}).status,/NOT ESTABLISHED/));
+for(const claim of Object.keys(CLAIM_LABELS))test(`actionable route for ${claim}`,()=>{const r=auditComparison({claim});assert.ok(r.next.length>50);assert.ok(["history","context","bridge"].includes(r.route));});
+for(const input of [null,[],{units:true},{claim:"clinical"},{endpointB:"EC50"},{expression:"yes"}])test(`invalid audit ${JSON.stringify(input)}`,()=>assert.throws(()=>validateAudit(input)));

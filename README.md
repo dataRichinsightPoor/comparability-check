@@ -4,8 +4,9 @@
 
 A model in 99 Small Problems in Bioassay. Compare reported binding EC50 values without quietly turning a measurement difference into a lot effect.
 
-This research-use tool separates three inferential problems:
+This research-use tool begins with a claim audit, then separates three inferential problems:
 
+- **Claim audit:** Specify the intended conclusion, endpoint identities, design and declared evidence. Receive an unresolved-evidence checklist and a next discriminating measurement. It never evaluates raw data or converts declarations into proof.
 - **Historical contrast:** Enter an earlier lot-A/method-P EC50 and a later lot-B/method-Q EC50. Explore different assumed method shifts that produce the same observed ratio. The lot effect remains unidentified; the slider is a sensitivity scenario, not an estimated correction.
 - **Cells and endpoints:** Keep a shared one-site antibody binding parameter fixed while changing positive-cell fraction, target density per positive cell, passage, cell load, tracer concentration, and signal population. Compare absolute and normalized binding, competitive tracer blockade, and an explicitly separate generic functional-response sandbox.
 - **Crossed bridge:** Enter complete, paired experimental blocks containing both lots under both methods. Estimate within-method geometric EC50 ratios, a ratio-of-ratios interaction, paired Student t confidence intervals, and endpoint-specific equivalence assessments under declared assumptions.
@@ -15,6 +16,10 @@ All bundled numerical examples are synthetic. The rituximab–Raji illustration 
 ## The coherent scientific question
 
 Did the antibody change, did the cell substrate change, or did the readout change? The model does not collapse these into one potency parameter.
+
+Version 0.3 opens with “Which conclusion are you trying to establish?” rather than a calculator. The audit separates a potentially suitable design from an actual result; it does not approve affinity, genomic causation, functional prediction or equivalence based on selections. Numerical calculation remains in the appropriate model, and the generic functional layer remains distinct from rituximab biology.
+
+The cell simulator now audits its own negligible-depletion approximation against finite-supply calculations. Above a 10% diagnostic threshold, a warning recommends testing mass balance; the threshold is a heuristic, not assay qualification. Plots adapt to narrow screens without horizontal scrolling. Settings schema 3 includes the claim audit and retains imports from schemas 1 and 2.
 
 Under its one-site, negligible-depletion assumptions, loss of positive cells or accessible sites can reduce the binding plateau without shifting normalized binding EC50. With finite ligand supply, target loss can instead shift the total-concentration EC50 left while the antibody parameter is unchanged; the exact equilibrium relation is EC50 = K + RT/2 ([Hulme and Trevethick, 2010](https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/)).
 

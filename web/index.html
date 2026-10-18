@@ -15,7 +15,7 @@
 <header class="masthead">
   <span class="brand">Data-Rich, Insight-Poor</span>
   <span class="series">99 SMALL PROBLEMS IN BIOASSAY</span>
-  <span class="version">v0.2.0 · Research tool</span>
+  <span class="version">v0.3.0 · Private review</span>
 </header>
 <main id="main">
   <section class="intro">
@@ -29,13 +29,47 @@
   </section>
   <p id="file-status" role="status" class="small"></p>
   <nav class="tabs" aria-label="Model views">
-    <button data-view="history" aria-pressed="true">Historical contrast</button>
+    <button data-view="audit" aria-pressed="true">Claim audit</button>
+    <button data-view="history" aria-pressed="false">Historical contrast</button>
     <button data-view="context" aria-pressed="false">Cells &amp; endpoints</button>
     <button data-view="bridge" aria-pressed="false">Crossed bridge</button>
     <button data-view="methods" aria-pressed="false">Methods &amp; limits</button>
   </nav>
 
-  <section id="history" class="view">
+  <section id="audit" class="view">
+    <div class="workspace">
+      <aside class="controls">
+        <p class="eyebrow">START WITH THE CONCLUSION</p><h2>What are you trying to establish?</h2>
+        <p class="small">Describe your comparison. This checklist identifies missing evidence; it does not inspect your data or award a validity score.</p>
+        <label for="audit-claim">Intended claim</label><select id="audit-claim"></select>
+        <label for="audit-endpointA">First measurement</label><select id="audit-endpointA"></select>
+        <label for="audit-endpointB">Second measurement</label><select id="audit-endpointB"></select>
+        <label for="audit-design">Comparison design</label>
+        <select id="audit-design"><option value="historical">Separate historical experiments</option><option value="sideBySide">Side-by-side under one method</option><option value="crossed">Both lots under both methods</option></select>
+        <label for="audit-cells">Cell substrate within each lot contrast</label>
+        <select id="audit-cells"><option value="unknown">Not established</option><option value="matched">Matched preparation and cell state</option><option value="changed">Cell context changed</option></select>
+        <details class="advanced" open><summary>Measurement evidence</summary>
+          <label for="audit-units">Common concentration scale established?</label>
+          <select id="audit-units"><option value="unknown">Not established</option><option value="yes">Yes, checked</option><option value="no">No</option></select>
+          <label for="audit-curves">Curve range and midpoint supported?</label>
+          <select id="audit-curves"><option value="unknown">Not established</option><option value="yes">Yes, checked</option><option value="no">No</option></select>
+          <label for="audit-expression">Expression across relevant samples/passages</label>
+          <select id="audit-expression"><option value="unknown">Not established</option><option value="tracked">Fraction and per-positive expression tracked</option><option value="untracked">Not tracked</option></select>
+        </details>
+      </aside>
+      <div class="results" aria-live="polite">
+        <div class="verdict"><span id="audit-status" class="status-label"></span><h2 id="audit-title"></h2><p id="audit-statement"></p></div>
+        <section class="audit-section"><p class="eyebrow">WHAT REMAINS UNRESOLVED</p><ul id="audit-gaps" class="evidence-list"></ul></section>
+        <section class="audit-section next-measurement"><p class="eyebrow">NEXT DISCRIMINATING MEASUREMENT</p><p id="audit-next"></p></section>
+        <section id="audit-preflight-section" class="audit-section"><h3>Before calculating a ratio</h3><ul id="audit-preflight" class="evidence-list"></ul></section>
+        <div class="toolbar"><button id="audit-route">Explore the relevant model</button><button id="audit-download" class="quiet">Export claim audit</button></div>
+        <p id="audit-boundary" class="small"></p>
+        <div class="evidence-key"><section><h3>Observed</h3><p>Measured curves, cell phenotype and experimental records.</p></section><section><h3>Assumed</h3><p>Chosen kinetics, stoichiometry, stability and response models.</p></section><section><h3>Unresolved</h3><p>A causal explanation not separated by the experiment.</p></section></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="history" class="view" hidden>
     <div class="workspace">
       <aside class="controls">
         <p class="eyebrow">THE OBSERVED COMPARISON</p><h2>Two measured corners</h2>
@@ -79,9 +113,9 @@
         <p class="eyebrow">HOLD THE ANTIBODY FIXED</p><h2>Let the assay context change</h2>
         <p class="small">Raji is held stable as a reference assumption, not a guarantee about the cell line. The engineered comparator is a synthetic CD20-expressing population.</p>
         <label for="context-preset">Mechanistic scenario</label>
-        <select id="context-preset"><option value="amplitude">Expression loss, no depletion</option><option value="depletion">Expression loss with ligand depletion</option><option value="tracer">Higher tracer, same antibody</option><option value="reserve">Generic functional response reserve</option></select>
+        <select id="context-preset"><option value="amplitude">Expression loss, no depletion</option><option value="depletion">Expression loss with ligand depletion</option><option value="tracer">Higher tracer, same antibody</option><option value="reserve">Generic functional response reserve</option><option value="custom" disabled>Custom settings</option></select>
         <label for="passage">Engineered-cell passage <strong id="passage-value">20</strong></label>
-        <input id="passage" type="range" min="0" max="100" step="1" value="20">
+        <input id="passage" type="range" min="0" max="200" step="any" value="20">
         <label for="lossMode">Expression-loss pattern</label>
         <select id="lossMode"><option value="both">Fewer positive cells + lower density</option><option value="fraction">Fewer positive cells only</option><option value="density">Lower density per positive cell only</option><option value="none">No expression loss</option></select>
         <div class="pair-inputs"><label>Initial positive fraction<input id="fraction0" type="number" min="0" max="1" step=".05" value=".95"></label><label>Antibody site K · nM<input id="kd" type="number" min=".000001" step="any" value="1"></label></div>
@@ -111,6 +145,7 @@
           </div>
           <div class="plot-control"><label for="context-plot">Readout</label><select id="context-plot"><option value="absolute">Direct binding · absolute relative signal</option><option value="normalized">Direct binding · self-normalized</option><option value="competition">Tracer competition · fraction blocked</option><option value="functional">Generic reporter · fraction inhibited</option></select></div>
           <p id="plot-boundary" class="next"></p>
+          <p id="depletion-audit" class="next" hidden></p>
           <div class="legend"><span><i class="swatch raji"></i>Raji reference</span><span><i class="swatch initial"></i>Engineered · passage 0</span><span><i class="swatch current"></i>Engineered · selected passage</span></div>
           <figure><div id="context-chart" class="chart"></div><figcaption class="small" id="context-caption"></figcaption></figure>
           <div id="context-table" class="table-wrap"></div>
@@ -135,7 +170,7 @@
       <aside class="controls">
         <p class="eyebrow">THE CROSSED EXPERIMENT</p><h2>Fill all four corners</h2>
         <label for="preset">Synthetic example</label>
-        <select id="preset"><option value="common">Common method shift</option><option value="interaction">Lot-by-method interaction</option><option value="imprecise">Similar estimates, wide uncertainty</option></select>
+        <select id="preset"><option value="common">Common method shift</option><option value="interaction">Lot-by-method interaction</option><option value="imprecise">Similar estimates, wide uncertainty</option><option value="custom" disabled>Custom data or margins</option></select>
         <label for="csv">Run-level EC50 data</label>
         <p class="small">AP = lot A, method P. One row is one independent, complete experimental block with all four combinations. Use the same binding endpoint throughout. Do not mix binding EC50 with blocking IC50, pair unrelated historical runs, or enter technical wells as independent blocks.</p>
         <textarea id="csv" spellcheck="false" rows="8" aria-describedby="csv-help"></textarea>
@@ -166,6 +201,8 @@
     <p class="eyebrow">INSPECT THE ASSUMPTIONS</p><h2>Comparable for which conclusion?</h2>
     <p>This is a bounded comparison model, not a dose-response fitter or a regulatory validation system. The historical and bridge views analyze supplied EC50 values; the cell-context view generates synthetic curves to expose different explanations, not fit or diagnose a real assay.</p>
     <div class="method-grid">
+      <section><h3>A checklist is not evidence verification</h3><p>The claim audit applies explicit rules to your declarations. It does not inspect raw curves or experimental records, calculate an evidence score, or turn checked boxes into proof. A potentially suitable design is not an empirical result.</p><p>Endpoint mismatch remains a barrier to a single potency contrast even when units match. Affinity, genomic causation, functional prediction and equivalence retain evidence requirements outside the checklist.</p></section>
+      <section><h3>Check the approximation against the entered load</h3><p>Even with depletion disabled, the simulator calculates finite-supply ligand depletion at the binding midpoint and unchallenged tracer depletion. A value above 10% triggers a diagnostic warning rather than silently changing the curves; this is a heuristic, not an acceptance limit (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/" target="_blank" rel="noopener">Hulme &amp; Trevethick, 2010</a>).</p><p>The check compares two versions of the same stipulated one-site model. It does not validate that model for a real antibody or cell substrate.</p></section>
       <section><h3>Historical contrast</h3><p>The teaching model is E(lot, method) = θ(lot) × m(method). Two diagonal observations determine only the product of the lot ratio and method ratio. Slider values are sensitivity scenarios; no distribution or plausible bound for the method effect is inferred.</p><p>Method-by-lot interactions, sample aging, and era effects can make this simple separation inadequate. More precise diagonal measurements cannot fill the missing comparisons.</p></section>
       <section><h3>Crossed bridge</h3><p>For block i, dP = ln(BP) − ln(AP), dQ = ln(BQ) − ln(AQ), and dI = dQ − dP. Each estimate is exp(mean(d)); its interval is exp(mean(d) ± t × SD(d)/√n).</p><p>The model requires independent blocks and approximately normal block-level log contrasts. It does not model unequal fit precision, outliers, raw-curve error, missing cells, or unpaired designs. Small n can give unreliable intervals if those assumptions fail.</p></section>
       <section><h3>Equivalence is endpoint-specific</h3><p>A 90% interval strictly inside justified, prespecified margins corresponds to a two-one-sided equivalence test at α = 0.05 (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5502906/" target="_blank" rel="noopener">Lakens, 2017</a>). The 95% intervals are provided separately in the table; a nonsignificant difference is not an equivalence result.</p><p>Decisions are per contrast, not a multiplicity-adjusted family of independent claims. Zero observed contrast variation or only one block withholds uncertainty and equivalence. The tool never declares whole-product biosimilarity.</p></section>
@@ -179,6 +216,6 @@
     </div>
   </section>
 </main>
-<footer><span>Comparability Check · v0.2.0 · MIT</span><a href="https://github.com/dataRichinsightPoor/comparability-check" target="_blank" rel="noopener">Inspect code &amp; tests on GitHub</a><span>Software verification ≠ biological validation.</span></footer>
+<footer><span>Comparability Check · v0.3.0 · MIT</span><a href="https://github.com/dataRichinsightPoor/comparability-check" target="_blank" rel="noopener">Inspect code &amp; tests on GitHub</a><span>Software verification ≠ biological validation.</span></footer>
 </body>
 </html>

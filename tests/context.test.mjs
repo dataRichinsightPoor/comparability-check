@@ -77,6 +77,22 @@ test("depletion solution matches combined equal-affinity ligand solution",()=>{
     near(q.boundTracer+q.boundCompetitor,bound);near(q.boundTracer/bound,2/(2+c));
   }
 });
+test("depletion diagnostic exists when approximation is selected",()=>{
+  const r=analyzeContext({depletion:false,cells:1e7});
+  assert.ok(r.states.raji.bindingDepletionFraction>.1);
+  assert.ok(r.states.raji.exactBaselineTracerDepletion>.1);
+  near(r.states.raji.bindingEC50,1);
+});
+test("diagnostic matches depletion enabled without changing selected mode",()=>{
+  const a=analyzeContext({depletion:false}),b=analyzeContext({depletion:true});
+  near(a.states.raji.exactBaselineTracerDepletion,b.states.raji.tracerDepletion);
+  near(a.states.raji.bindingDepletionFraction,b.states.raji.rt/(2+b.states.raji.rt));
+});
+test("low cell load passes the diagnostic heuristic",()=>{
+  const r=analyzeContext({cells:100});
+  assert.ok(r.states.raji.bindingDepletionFraction<.1);
+  assert.ok(r.states.raji.exactBaselineTracerDepletion<.1);
+});
 test("falling density reduces generic reserve without changing site K",()=>{
   const a=analyzeContext({passage:0,reporterThreshold:1000}),b=analyzeContext({passage:60,reporterThreshold:1000});
   near(a.states.current.bindingEC50,b.states.current.bindingEC50);
@@ -106,5 +122,5 @@ test("binding increases and blocking increases with competitor",()=>{
     for(let i=1;i<p.length;i++){assert.ok(p[i].binding>=p[i-1].binding);assert.ok(p[i].competition>=p[i-1].competition-1e-12);}
   }
 });
-for(const x of [{passage:-1},{fraction0:1.1},{kd:0},{tracer:0},{volume:0},{gate:"median"},{lossMode:"integration-proven"},{depletion:"yes"},{plot:"clinical"},{reporterHill:20}])
+for(const x of [null,[],"bad",{passage:-1},{fraction0:1.1},{kd:0},{tracer:0},{volume:0},{gate:"median"},{lossMode:"integration-proven"},{depletion:"yes"},{plot:"clinical"},{reporterHill:20}])
   test(`context rejects ${JSON.stringify(x)}`,()=>assert.throws(()=>validateContext(x)));

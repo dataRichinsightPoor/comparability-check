@@ -1,11 +1,11 @@
 /**
- * Comparability Check v0.2.0
+ * Comparability Check v0.3.0
  * Model schema: history {earlier, later, methodMultiplier};
  * bridge [{run: string, AP, BP, AQ, BQ}], all EC50s positive in one common unit.
  * Complete rows are independent experimental blocks, NOT technical replicates.
  * Paired log contrasts preserve within-block covariance.
  */
-export const VERSION = "0.2.0";
+export const VERSION = "0.3.0";
 export function positive(x, name = "Value") {
   if (typeof x !== "number" || !Number.isFinite(x) || x <= 0)
     throw new Error(`${name} must be a finite positive number.`);

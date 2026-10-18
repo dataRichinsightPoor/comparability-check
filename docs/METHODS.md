@@ -2,6 +2,14 @@
 
 Comparability Check is a deliberately bounded model. The historical mode illustrates structural non-identifiability; the cell-context mode exposes distinct biological and readout explanations; the bridge mode estimates like-endpoint contrasts from complete paired blocks.
 
+## Claim audit
+
+The audit is a deterministic reasoning checklist, not a classifier trained on assay data or a numerical evidence score. Inputs are user declarations about endpoints, design, common concentration scales, curve support, matched cell preparation, and expression tracking.
+
+Different endpoint identities remain a gap even when units match. A complete crossed design may support assessment of method-dependent lot contrasts, but the checklist does not itself establish an effect or equivalence. The affinity, genomic-integration, functional-prediction and equivalence claims always retain evidence requirements beyond the audit's inputs.
+
+The output supplies a scoped statement, unresolved evidence and a proposed next discriminating measurement. It does not inspect documents or curves, verify experimental independence, infer genomic causation, or issue a global “comparable” score.
+
 ## Cell state and signal population
 
 The Raji reference has fixed accessible site density and positive fraction one, by explicit model assumption. For the engineered population, passage t determines:
@@ -38,6 +46,8 @@ B=\frac{2R_TC_T}{R_T+C_T+K+\sqrt{(R_T-C_T)^2+2K(R_T+C_T)+K^2}},
 \]
 
 The midpoint relation follows from half occupancy plus ligand conservation and is documented in the equilibrium-assay literature ([Hulme and Trevethick, 2010](https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/)). Consequently, loss of target can lower the apparent total-dose EC50 while reducing the plateau, without any change in the antibody parameter.
+
+Even when the negligible-depletion approximation is selected, the simulator calculates the finite-supply depletion fraction at the binding midpoint, RT/(2K+RT), and the exact unchallenged tracer-depletion fraction. The relevant view warns if the largest value across the simulated contexts exceeds 10%, a diagnostic heuristic motivated by equilibrium-assay guidance rather than an acceptance limit ([Hulme and Trevethick, 2010](https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/)). This diagnostic does not silently alter the selected curves or normalize away the discrepancy.
 
 This is a limiting one-site system, not a full-length rituximab avidity model. Bivalency, receptor organization, heterogeneous positive-cell expression, internalization, epitope accessibility changes, nonequilibrium kinetics, and wash-dependent retention can make real cell-binding behavior depart from these predictions.
 

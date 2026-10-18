@@ -6,6 +6,8 @@ Verification concerns numerical implementation, input handling, and the browser 
 
 ## Browser QA inventory
 
+- **Claim audit:** All seven claims; same and mixed endpoints; historical/side-by-side/crossed designs; unknown/no/yes measurement declarations; matched versus changed cells; expression tracking; actionable navigation; report export; settings persistence. A complete checklist must not issue an empirical or causal result.
+- **Approximation audit:** High cell load with depletion disabled must expose a warning; enabling finite supply clears that approximation warning without claiming assay validation.
 - **Historical mode:** Default ratio 0.25, sensitivity slider, all three scenario buttons, EC50 edits, unit-label changes, invalid/zero input, recovery, and reset by settings import.
 - **Bridge mode:** All three synthetic presets, editable CSV, duplicate/incomplete/censored input rejection, zero-variation and one-block uncertainty handling, independent lot and interaction margins, qualification toggle and reset on edits.
 - **Evidence display:** Plot values agree with tabulated results, no equivalence claim for an unsupported historical contrast, limits visible, method/lot ratio direction explicit.
@@ -18,7 +20,18 @@ Verification concerns numerical implementation, input handling, and the browser 
 
 ## Automated verification
 
-Run `npm test` to execute the dependency-free Node.js numerical suite. The GitHub Actions workflow repeats the suite and both CLI smoke tests on each push and pull request.
+Run `npm test` to execute the dependency-free Node.js model and rule suite. The GitHub Actions workflow repeats the suite and all three CLI smoke tests on each push and pull request.
+
+## Private preview 0.3.0 results
+
+The user requested continued private refinement. Neither public publication nor a change in repository visibility is part of this update.
+
+- **Automated suite:** 133/133 tests passed on Node.js 20.20.2. Added coverage includes seven claim routes, endpoint mismatch, unknown evidence, refusal to approve mechanistic claims from declarations, finite-supply diagnostics with the approximation still selected, and malformed cell-context settings.
+- **Claim audit:** All seven claims were exercised in the browser. A suitable declared design produces a conditional design assessment, never an empirical result; mixed endpoints restore an explicit evidence gap. Navigation and Markdown audit export were checked.
+- **Approximation diagnostic:** High cell load with depletion disabled displayed the warning. Enabling mass balance removed that approximation warning without changing the stated biological limits.
+- **Provenance and imports:** Edits mark examples as custom. Schema 3 preserves audit settings; schemas 1 and 2 migrate using audit defaults. Passage 150 round-tripped through the slider, whose range now matches the model's 0–200 range. Malformed context arrays were rejected without partial state mutation.
+- **Responsive plots:** Historical, cell-context and bridge plots were inspected at 375 px and desktop width. Plot labels and axes reflow without horizontal scrolling; cell and bridge results use readable mobile cards. Desktop/mobile transitions and document-level overflow were checked.
+- **Runtime:** No page JavaScript errors were observed. File import checks waited for the asynchronous load to complete before asserting the restored state.
 
 ## Release 0.2.0 results
 
