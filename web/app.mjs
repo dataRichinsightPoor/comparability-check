@@ -1,19 +1,21 @@
 import {VERSION,historical,parseCSV,analyzeBridge,PRESETS} from "./model.mjs";
+import {contextSettings,applyContext,initializeContext} from "./context-ui.mjs";
+import {validateContext,CONTEXT_DEFAULTS} from "./context-model.mjs";
 const $=id=>document.getElementById(id);
 let view="history", bridgeResult=null, historyResult=null;
-const fmt=x=>Number(x).toPrecision(3).replace(/\.?0+$/,""); // overridden for robust fixed/scientific formatting below
 const f=x=>x===null?"Unavailable":(Math.abs(x)>=1000||Math.abs(x)<.01?x.toExponential(2):Number(x.toPrecision(3)).toString());
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function setView(v){
-  if(!["history","bridge","methods"].includes(v))return;
+  if(!["history","context","bridge","methods"].includes(v))return;
   view=v;
   document.querySelectorAll(".view").forEach(e=>e.hidden=e.id!==v);
   document.querySelectorAll("[data-view]").forEach(e=>e.setAttribute("aria-pressed",String(e.dataset.view===v)));
 }
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
+$("import-trigger").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();$("import-settings").click();}});
 $("csv").value=PRESETS.common;
 function drawHistory(r){
-  const W=680,H=260,L=68,R=24,T=18,B=52;
+  const W=680,H=260,L=88,R=24,T=18,B=52;
   const center=Math.log2(r.observedRatio), x=v=>L+(v+4)/8*(W-L-R),y=v=>T+(center+4-v)/8*(H-T-B);
   let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Log-scale compatible-explanations plot. Lot ratio times method ratio equals the observed ratio."><title>Compatible lot and method ratios</title>`;
   for(const t of [-4,-2,0,2,4]){
@@ -33,6 +35,7 @@ function updateHistory(){
     $("observed").textContent=f(r.observedRatio)+"×";$("conditional").textContent=f(r.conditionalLotRatio)+"×";$("assumed").textContent=f(r.methodMultiplier)+"×";
     $("multiplier-label").textContent=f(r.methodMultiplier)+"×";
     $("history-statement").textContent=r.statement;
+    document.querySelector("#history .verdict h2").innerHTML=r.observedRatio===1?"The numbers match.<br>The lot effect is still unresolved.":"The numbers differ.<br>The lot effect is unresolved.";
     const unit=$("unit").value.trim()||"common units";
     $("can-say").textContent=`The reported EC50 changed from ${f(r.earlier)} to ${f(r.later)} ${unit}. The later/earlier ratio is ${f(r.observedRatio)}.`;
     document.querySelectorAll(".matrix label small").forEach(e=>e.textContent=`EC50 · ${unit}`);
@@ -68,7 +71,8 @@ function updateBridge(){
     $("bridge-summary").textContent=`${r.n} complete independent block${r.n===1?"":"s"}. Each method gets its own lot comparison; the interaction asks whether that contrast changes with method.`;
     drawBridge(r);
     const ci=v=>v?`${f(v[0])}–${f(v[1])}`:"Unavailable";
-    $("bridge-table").innerHTML=`<table><thead><tr><th>Contrast</th><th>Estimate</th><th>90% CI</th><th>95% CI</th><th>Assessment</th></tr></thead><tbody>${[["P","B/A · P"],["Q","B/A · Q"],["interaction","Interaction"]].map(([k,name])=>`<tr><td>${name}</td><td class="numeric">${f(r[k].estimate)}</td><td class="numeric">${ci(r[k].ci90)}</td><td class="numeric">${ci(r[k].ci95)}</td><td>${r[k].decision}${r[k].warning?`<br><small>${esc(r[k].warning)}</small>`:""}</td></tr>`).join("")}</tbody></table>`;
+    const contrasts=[["P","B/A · P"],["Q","B/A · Q"],["interaction","Interaction"]];
+    $("bridge-table").innerHTML=`<table><thead><tr><th>Contrast</th><th>Estimate</th><th>90% CI</th><th>95% CI</th><th>Assessment</th></tr></thead><tbody>${contrasts.map(([k,name])=>`<tr><td>${name}</td><td class="numeric">${f(r[k].estimate)}</td><td class="numeric">${ci(r[k].ci90)}</td><td class="numeric">${ci(r[k].ci95)}</td><td>${r[k].decision}${r[k].warning?`<br><small>${esc(r[k].warning)}</small>`:""}</td></tr>`).join("")}</tbody></table><div class="mobile-results">${contrasts.map(([k,name])=>`<section><h3>${name} · ${f(r[k].estimate)}×</h3><p>90% CI: ${ci(r[k].ci90)}<br>95% CI: ${ci(r[k].ci95)}</p><strong>${r[k].decision}</strong>${r[k].warning?`<p>${esc(r[k].warning)}</p>`:""}</section>`).join("")}</div>`;
     const warnings=[...new Set(["P","Q","interaction"].map(k=>r[k].warning).filter(Boolean))];
     $("bridge-warning").textContent=[...warnings, r.n<5?"Few blocks: log-normality and outlier sensitivity cannot be reliably assessed from this sample.":"", "A retained old lot is today's material. This bridge does not reconstruct its original condition or prove intrinsic-affinity equivalence."].filter(Boolean).join(" ");
   }catch(e){bridgeResult=null;$("bridge-error").textContent=e.message;$("bridge-error").hidden=false;$("bridge-output").hidden=true;}
@@ -80,7 +84,7 @@ function download(name,text,type){
   const url=URL.createObjectURL(new Blob([text],{type})),a=document.createElement("a");
   a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-function settings(){return {schemaVersion:1,modelVersion:VERSION,view,history:{earlier:$("earlier").value,later:$("later").value,unit:$("unit").value,log2Multiplier:$("multiplier").value},bridge:{csv:$("csv").value,...options()}};}
+function settings(){return {schemaVersion:2,modelVersion:VERSION,view,history:{earlier:$("earlier").value,later:$("later").value,unit:$("unit").value,log2Multiplier:$("multiplier").value},bridge:{csv:$("csv").value,...options()},context:contextSettings()};}
 $("export-settings").addEventListener("click",()=>download("comparability-check-settings.json",JSON.stringify(settings(),null,2),"application/json"));
 $("download-csv").addEventListener("click",()=>download("comparability-check-blocks.csv",$("csv").value,"text/csv"));
 $("import-settings").addEventListener("change",async e=>{
@@ -88,17 +92,22 @@ $("import-settings").addEventListener("change",async e=>{
     const file=e.target.files[0];if(!file)return;
     if(file.size>250000)throw new Error("Settings file is too large.");
     const s=JSON.parse(await file.text());
-    if(s.schemaVersion!==1||!s.history||!s.bridge)throw new Error("Unrecognized settings format.");
+    if(![1,2].includes(s.schemaVersion)||!s.history||!s.bridge)throw new Error("Unrecognized settings format.");
     const h=s.history,b=s.bridge;
     if(typeof h.unit!=="string"||h.unit.length>24)throw new Error("Invalid unit label.");
+    for(const k of ["lower","upper","interactionLower","interactionUpper"])
+      if(typeof b[k]!=="number"||!Number.isFinite(b[k]))throw new Error("Settings must include four finite numerical margins.");
+    if(!["history","context","bridge","methods"].includes(s.view))throw new Error("Unrecognized view.");
     const exponent=Number(h.log2Multiplier);
     if(!Number.isFinite(exponent)||exponent < -4||exponent>4)throw new Error("Method slider must be between −4 and 4 in log2 units.");
     historical(Number(h.earlier),Number(h.later),2**exponent);
     analyzeBridge(parseCSV(b.csv),{...b,qualified:false});
+    if(s.schemaVersion===2&&(!s.context||typeof s.context!=="object"))throw new Error("Cell-context settings are missing.");
+    const cs=validateContext(s.schemaVersion===2?s.context:CONTEXT_DEFAULTS);
     $("earlier").value=h.earlier;$("later").value=h.later;$("unit").value=h.unit;$("multiplier").value=exponent;
     $("csv").value=b.csv;
     for(const [id,key] of [["lower","lower"],["upper","upper"],["ilower","interactionLower"],["iupper","interactionUpper"]])$(id).value=b[key];
-    $("qualified").checked=false;updateHistory();updateBridge();setView(s.view);
+    $("qualified").checked=false;applyContext(cs);updateHistory();updateBridge();setView(s.view);
     $("file-status").textContent="Settings loaded. Reconfirm assay assumptions before making a conditional equivalence claim.";
   }catch(err){$("file-status").textContent=`Could not load settings: ${err.message}`;}
   e.target.value="";
@@ -110,5 +119,6 @@ $("download-report").addEventListener("click",()=>{
   download("comparability-check-analysis.md",text,"text/markdown");
 });
 // Stable test identifiers for the complete control surface.
+initializeContext(download);
 document.querySelectorAll("button,input,select,textarea,a").forEach((e,i)=>{e.dataset.testid=e.id||e.dataset.view||`control-${i}`;});
 updateHistory();updateBridge();

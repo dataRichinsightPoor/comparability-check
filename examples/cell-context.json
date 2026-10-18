@@ -1,0 +1,19 @@
+{
+  "passage": 20,
+  "lossMode": "both",
+  "fraction0": 0.95,
+  "fractionHalfLife": 20,
+  "densityHalfLife": 20,
+  "rajiDensity": 100000,
+  "engineeredDensity": 100000,
+  "cells": 1000000,
+  "volume": 100,
+  "kd": 1,
+  "tracer": 1,
+  "depletion": true,
+  "gate": "all",
+  "signalFloor": 0.05,
+  "plot": "normalized",
+  "reporterThreshold": 20000,
+  "reporterHill": 1
+}

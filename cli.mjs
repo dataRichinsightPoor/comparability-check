@@ -1,5 +1,6 @@
 import {readFile} from "node:fs/promises";
 import {parseCSV,analyzeBridge,historical} from "./web/model.mjs";
+import {analyzeContext} from "./web/context-model.mjs";
 try {
   const [command,...args]=process.argv.slice(2);
   if(command==="history"&&args.length===3){
@@ -7,8 +8,12 @@ try {
   } else if(command==="bridge"&&[1,5].includes(args.length)){
     const options=args.length===5?{lower:Number(args[1]),upper:Number(args[2]),interactionLower:Number(args[3]),interactionUpper:Number(args[4])}:{};
     console.log(JSON.stringify(analyzeBridge(parseCSV(await readFile(args[0],"utf8")),options),null,2));
+  } else if(command==="context"&&args.length<=1){
+    const input=args.length?JSON.parse(await readFile(args[0],"utf8")):{};
+    const {settings,states,scope}=analyzeContext(input);
+    console.log(JSON.stringify({settings,states,scope},null,2));
   } else {
-    console.error("Usage:\n  node cli.mjs history EARLIER LATER ASSUMED_METHOD_MULTIPLIER\n  node cli.mjs bridge FILE.csv [LOT_LOWER LOT_UPPER INTERACTION_LOWER INTERACTION_UPPER]\nCLI output is exploratory; margins do not imply assay qualification.");
+    console.error("Usage:\n  node cli.mjs history EARLIER LATER ASSUMED_METHOD_MULTIPLIER\n  node cli.mjs bridge FILE.csv [LOT_LOWER LOT_UPPER INTERACTION_LOWER INTERACTION_UPPER]\n  node cli.mjs context [SETTINGS.json]\nCLI output is exploratory; margins do not imply assay qualification.");
     process.exitCode=1;
   }
 }catch(error){console.error(error.message);process.exitCode=1;}
