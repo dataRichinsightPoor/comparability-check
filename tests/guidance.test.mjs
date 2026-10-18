@@ -28,9 +28,9 @@ test("guidance carries corrected ICH sources, early discovery source and numeric
 test("pharma practice distinguishes GMP execution from developmental stage",()=>{
   for(const text of ["Development stage and GMP answer different questions.","Early discovery is not early clinical release.","not from statutory CGMP","https://www.fda.gov/media/119267/download","workshop-introduction-to-bioassay-development.pdf","USPNF_M912_02_01.html"])assert.ok(html.includes(text),text);
 });
-test("published essay download exactly matches the maintained article",async()=>{
+test("essay download matches maintained text with resource-relative image paths",async()=>{
   assert.equal(await readFile(new URL("../web/resources/to-be-or-not-to-be-comparable.md",import.meta.url),"utf8"),
-    await readFile(new URL("../docs/COMPANION-ARTICLE.md",import.meta.url),"utf8"));
+    (await readFile(new URL("../docs/COMPANION-ARTICLE.md",import.meta.url),"utf8")).replaceAll("../web/resources/","./"));
 });
 test("all linked downloadable files are bundled",async()=>{
   for(const [,p] of html.matchAll(/href="(resources\/[^"]+)"/g)){

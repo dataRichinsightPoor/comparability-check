@@ -146,3 +146,16 @@ User-entered values are calculated in browser memory; no upload or persistent br
 The repository includes [the companion essay](docs/COMPANION-ARTICLE.md), [mathematical methods](docs/METHODS.md), numerical tests, a GitHub Actions test workflow, and a command-line entry point. MIT licensed; cite using `CITATION.cff`.
 
 Software tests verify implementation. They do not constitute biological validation.
+
+## Illustrated companion essay
+
+The private illustrated revision is available at `web/article.html`, with embedded
+figures, rendered MathML equations, a rich-copy control, selection fallback, and
+links to the interactive model. Rebuild it with `npm ci && npm run build:article`.
+The model itself still runs without installing build dependencies.
+
+The original software and documentation are MIT licensed. Reproduced panels from
+Lee et al. retain CC BY 4.0, with attribution and crop details in
+[figure credits](web/resources/FIGURE-CREDITS.md). No third-party artwork is
+relicensed under MIT. Clipboard checks do not establish retention in a particular
+publishing editor.

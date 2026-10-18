@@ -2,257 +2,233 @@
 
 Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07
 
-Did the antibody change, did the cells change, or did the readout change?
+In the accompanying simulation, increasing the number of independent run-level contrasts from four to sixteen raises the frequency of a misleading historical lot-equivalence declaration from 2.87% to 40.59%. The antibody-lot contrast has not diminished: its true within-method EC50 ratio remains 2.0, while a compensating method change centers the historical ratio on 1.0. These are synthetic results, not observed pharmaceutical failure rates.
 
-An older report gives a binding EC50 of 4 nM. A newer report gives 1 nM for another lot of the same antibody. Both curves look respectable, the concentration units agree, and the spreadsheet offers an uncomplicated conclusion: fourfold better binding.
+The apparent paradox is the point. More precise estimation can strengthen a conclusion that the experimental design never identified. An old lot tested with an old method and a new lot tested with a new method provide an estimate of their combined difference; the narrower confidence interval still belongs to that combined difference.
 
-Now change the comparison. The earlier assay used a cell line expressing its target endogenously. The later assay used an engineered line whose surface expression declined with passage. One report measured antibody binding; another measured something called blocking.
+Rituximab binding to CD20-positive Raji cells provides a recognizable setting for this problem, including published work on biosimilar comparability ([Xu et al., 2019](https://www.tandfonline.com/doi/full/10.1080/19420862.2019.1578147)). Here, Raji is paired with a hypothetical engineered CD20-expressing line whose surface expression changes with passage. The lots, passage trajectories, and numerical experiments in the model are constructed examples, not measurements of a commercial product or a particular laboratory's cells.
 
-The numerical comparison remains possible. The biological comparison has become three different questions.
+This essay extends [Data-Rich, Insight-Poor CCI, “The Assay Got Better Because the Cells Got Worse”](https://www.linkedin.com/pulse/assay-got-better-because-cells-worse-ermelinda-damko-6kvme), which explored how loss of expression can improve an apparent blocking midpoint without improving the molecule. Here the question becomes what evidence would distinguish that explanation from a genuine molecular change. The companion [Comparability Check](https://datarichinsightpoor.github.io/comparability-check/) makes the assumptions adjustable, with a guided cell-context walkthrough, a crossed-method bridge, and fixed-seed simulations.
 
-This installment extends [Data-Rich, Insight-Poor CCI: The Assay Got Better Because the Cells Got Worse](https://www.linkedin.com/pulse/assay-got-better-because-cells-worse-ermelinda-damko-6kvme), which assembled mechanisms and simulations explaining why expression loss can improve an apparent blocking midpoint without improving the molecule. Here the question becomes operational: what comparison survives those possibilities, and what experiment could distinguish them?
+The broader concern running through this series is the distance between a measurement and its biological interpretation. Closing that distance requires understanding the sequence that produced the result: what the molecule encountered, what the cell converted into a response, what the instrument detected, and what the analysis preserved or removed. Insight becomes useful when that understanding changes the conclusion we can defend or identifies the next experiment that could distinguish competing explanations.
 
-This model uses rituximab–Raji as a recognizable binding context, with an explicitly hypothetical engineered CD20-expressing comparator; published comparability work has used rituximab binding to Raji cells ([Xu and colleagues, 2019](https://www.tandfonline.com/doi/full/10.1080/19420862.2019.1578147)). All example values and expression trajectories are synthetic, not measurements of a commercial lot or a real engineered line.
+## The historical ratio contains more than the antibody
 
-## We can compare numbers without having identified their cause
+Suppose an earlier report gives a binding EC50 of 4 nM and a later report gives 1 nM. Provided both estimates are supported by their curves and expressed on the same concentration scale, the second reported midpoint is fourfold lower. Calling that difference a fourfold improvement in the antibody introduces a causal attribution that the numbers alone do not supply.
 
-A binding EC50 is a midpoint of a specified response curve. In a fitted increasing logistic curve, it is the concentration halfway between the fitted lower and upper plateaus.
-
-An observation of 4 nM followed by 1 nM therefore supports a fourfold lower reported midpoint. If lot, protocol, and testing period changed together, it does not isolate a lot-specific effect.
-
-The model makes that limitation inspectable. Let the measured EC50 equal a lot-associated scale multiplied by a method-context factor:
+The simplest model makes the missing information visible. Let \(E_{\ell,m}\) denote an EC50 for lot \(\ell\) under method context \(m\), with a lot-associated scale \(\theta_\ell\) and a multiplicative context factor \(m_m\):
 
 \[
-E_{\ell,p}=\theta_\ell m_p.
+E_{\ell,m}=\theta_\ell m_m,\qquad
+\frac{E_{B,Q}}{E_{A,P}}
+=\frac{\theta_B}{\theta_A}\frac{m_Q}{m_P}.
 \]
 
-The historical ratio then satisfies:
+A historical ratio of 0.25 is compatible with a lot ratio of 0.25 and no method shift, identical lots with a method multiplier of 0.25, or a lot ratio of 2 combined with a method multiplier of 0.125. The data identify the product, not its factors. Even the direction of the lot-associated difference can remain unresolved.
+
+This factorization is deliberately favorable to comparison because it assumes a shared method effect. If a protocol change affects the two preparations differently, the relationship acquires an interaction; a single correction factor becomes insufficient. The [historical-contrast module](https://datarichinsightpoor.github.io/comparability-check/#history) exposes the alternative explanations, while the crossed bridge asks whether a lot contrast actually transfers.
+
+This is the experimental-design consequence of [“The Number Carries Its Protocol,” CCXLV](https://www.linkedin.com/pulse/number-carries-its-protocol-ermelinda-damko-bhdkc/): preserving provenance matters because it determines which contrasts the data contain. A protocol record becomes scientifically useful when we understand which steps can change the endpoint, whether they act similarly on the preparations being compared, and whether the design contains enough overlap to separate those effects. Documentation supplies the history; mechanistic reasoning determines what that history permits us to infer.
+
+Years apart, material state adds another difficulty. A retained vial provides overlap only to the extent that its storage, aging, and handling can be interpreted; testing an old vial today does not recreate the vial's condition at the earlier measurement. Reference stability and characterization are therefore part of the comparison, not background administrative details ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf)).
+
+## Precision can settle the wrong question
+
+The simulation's clearest counterexample sets the within-method lot ratio to 2.0 and the new/old method multiplier to 0.5. Their product is 1.0. This is the historical ratio's center on the log scale, not the arithmetic mean of every simulated ratio.
+
+![Synthetic historical comparison: a twofold lot contrast and a halving method effect cancel, while misleading equivalence declarations increase with independent run count.](../web/resources/misleading-historical-equivalence.png)
+
+Figure 1. More data can strengthen the wrong comparison. Original simulation figure: 100,000 experiments at each run count, seed 26007. A declaration requires the experimental 90% t confidence interval to lie strictly inside illustrative ratio margins of 0.8–1.25; whiskers are separate 95% Wilson intervals for Monte Carlo declaration frequencies. The counts are 2,869, 7,830, and 40,589 at 4, 8, and 16 independent run-level contrasts. These margins are teaching assumptions, not general QC acceptance limits; the attribution to lot equivalence is unjustified because lot and method are confounded. The reproducible design and result files accompany the [versioned model](https://github.com/dataRichinsightPoor/comparability-check/tree/v0.5.0).
+
+The confidence interval is becoming more informative about the historical contrast. It is not becoming more informative about an isolated lot effect. Under this constructed cancellation, enough independent observations will eventually make the combined contrast look convincingly equivalent even though the within-method lot ratio lies well outside the chosen margins.
+
+Replication is valuable when the comparison is identified. In a different scenario with equal lots and a shared method shift, the same simulation increases within-method equivalence power from about 32.1% to 83.2% to 99.6% as independent blocks increase from four to eight to sixteen. The lesson is to repair the comparison before optimizing its precision, not to collect fewer data.
+
+The [simulation lab](https://datarichinsightpoor.github.io/comparability-check/#simulation) separates six cases, including cancellation, lot-by-method interaction, comparator-specific drift, a true effect on the acceptance boundary, and an imprecise assay. It generates noisy summary endpoints, not raw concentration-response curves. Its operating characteristics are conditional on those assumptions; they do not estimate how frequently real laboratories make these errors.
+
+## The cells are part of the measurement
+
+An endogenous line can be a useful reference without being immutable. Raji-derived populations have shown altered CD20 expression under repeated rituximab selection, which establishes a possibility under that intervention, not an ordinary passage-dependent decay rate for every Raji culture ([CD20 regulation study](https://pmc.ncbi.nlm.nih.gov/articles/PMC3288324/)). The model holds its Raji reference stable so that the engineered population can be perturbed independently.
+
+That population has two distinct quantities: the positive fraction, \(p\), and accessible sites per positive cell, \(\rho\). Expression loss can change either quantity, and integrated transgenes can become silenced without being physically lost from the genome ([Cabrera et al., 2022](https://www.cell.com/cell-systems/fulltext/S2405-4712(22)00464-1)). “Poor integration” is consequently a hypothesis to investigate, not a diagnosis established by declining surface fluorescence.
+
+In a one-site equilibrium limit with negligible ligand depletion, fractional occupancy and an all-cell arithmetic-mean signal are:
 
 \[
-0.25=
-\left(\frac{\theta_B}{\theta_A}\right)
-\left(\frac{m_Q}{m_P}\right).
+q(C)=\frac{C}{K+C},\qquad S(C)\propto p\rho q(C).
 \]
 
-One possible explanation is a lot ratio of 0.25 with no method effect. Another is no lot difference with a method multiplier of 0.25. Even a lot ratio of 2 combined with a method multiplier of 0.125 produces the same historical observation.
+Reducing the positive fraction or the sites per positive cell lowers the plateau. Normalizing each curve to its own plateau removes the multiplicative \(p\rho\) term, leaving the same midpoint \(K\). A normalized EC50 can therefore remain unchanged while the absolute binding capacity of the population deteriorates substantially.
 
-These are alternative factorizations, not competing findings about rituximab. They show why the original observations cannot determine even the direction of the lot-associated difference without additional evidence.
+Gating removes a different part of the evidence. If only the positive fraction declines, a positive-only mean can remain stable because the retained positive cells are unchanged; an all-cell mean falls because more negative cells now contribute. This calculation concerns arithmetic means in a homogeneous positive subpopulation, not median fluorescence, a shifting threshold-defined gate, or a mixture of cells with different affinities.
 
-## We can match midpoints without matching curves
+The same interpretive problem appears in [“The Threshold Is Part of the Measurement,” CCV](https://www.linkedin.com/pulse/threshold-part-measurement-ermelinda-damko-ro1rc), where synthetic images expose how segmentation, background treatment, and the selected intensity statistic can change the apparent biological effect. A positive-cell gate and an image mask both define which observations enter the quantity being reported. Understanding that selection is what allows an unchanged number to be distinguished from an unchanged biological population.
 
-A ratio of fitted midpoints is not automatically a relative potency. That interpretation requires sufficiently similar response curves, ideally differing only by a horizontal displacement; relevant slope and asymptote similarity must be supported for the intended use ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)).
+The [guided Raji-versus-engineered-cell walkthrough](https://datarichinsightpoor.github.io/comparability-check/#walkthrough) begins with these separable changes and preserves absolute plateaus beside normalized curves. Its practical purpose is to make the absent measurement obvious: a normalized curve cannot recover the population information that normalization discarded.
 
-Consider normalized curves with the same EC50 of 1 but Hill slopes of 1 and 2. At 50% response their dose ratio is 1; at 20% it is 2, and at 80% it is 0.5. These are exact values from the model's analytic counterexample. The midpoint agrees while the single-relative-potency interpretation fails.
+Diagnosing the cause would require evidence at the relevant level. I would separate DNA copy or integrity, transcript abundance, total protein, surface accessibility, and population composition rather than treat one declining fluorescence statistic as a genomic readout. The first assay problem is to establish which cellular quantity moved; the engineering problem is to establish why.
 
-The new simulation lab repeats six endpoint experiments and a separate paired-cell sensitivity ensemble. Repetition can measure how often a procedure gives the right conditional answer under its assumptions; it cannot turn confounded historical observations into an identified lot effect or establish that the chosen mechanisms describe an actual antibody lot.
+## A lower midpoint can accompany a worse substrate
 
-## More data can strengthen the wrong comparison
-
-The accompanying figure isolates this problem in the model's masked-lot scenario: a true within-method EC50 ratio of 2.0 is multiplied by a new/old method factor of 0.5, centering the historical ratio on 1.0 on the log scale ([versioned simulation design](https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/docs/SIMULATION-DESIGN.md)). The historical observation looks reassuring precisely because the method change cancels the lot contrast.
-
-Across 100,000 simulated experiments at each run count, an unjustified historical lot-equivalence declaration occurred in 2.869% of experiments with 4 independent run-level contrasts, 7.830% with 8, and 40.589% with 16 ([4-run results](https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/blocks-4/simulation-results.json), [8-run results](https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/simulation-results.json), [16-run results](https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/blocks-16/simulation-results.json)). Each declaration used a 90% t confidence interval strictly inside illustrative ratio margins of 0.8–1.25; the figure's separate 95% Wilson intervals describe Monte Carlo uncertainty in the declaration rates, not uncertainty around an individual lot comparison ([simulation implementation](https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/web/simulation-model.mjs)).
-
-The calculation has not become less accurate. It is estimating the wrong quantity for the biological claim more precisely. These synthetic results illustrate a failure of attribution, not a failure of statistical arithmetic, and they are not measured failure rates for an actual QC assay.
-
-## We can observe expression loss without having diagnosed integration failure
-
-For the cell-context experiment, hold the antibody parameter fixed. Treat Raji as a stable reference within the simulation, and let the engineered population change with passage.
-
-The reference stability is an assumption, not an intrinsic property guaranteed by the cell-line name: Raji-derived populations can change CD20 expression under selection ([CD20 regulation study](https://pmc.ncbi.nlm.nih.gov/articles/PMC3288324/)). An endogenous cell line still requires characterization in the conditions and passage range being used.
-
-The engineered population has two separately adjustable properties: the proportion of cells that remain positive, \(p\), and accessible sites per positive cell, \(\rho\). This distinction is biologically motivated: transgene silencing can appear as loss of expression in a fraction of cells or reduced expression within individual cells ([Cabrera and colleagues, 2022](https://www.cell.com/cell-systems/fulltext/S2405-4712(22)00464-1)).
-
-Neither pattern, on its own, demonstrates poor genomic integration. Integrated transgenes can become silenced, so a decline in surface fluorescence is not sufficient evidence that the transgene was physically lost ([Cabrera and colleagues, 2022](https://www.cell.com/cell-systems/fulltext/S2405-4712(22)00464-1)).
-
-The model therefore prescribes an expression trajectory without assigning its molecular cause. Establishing that cause would require evidence separating DNA copy and integrity, transcript abundance, protein production, surface accessibility, and changes in the population being sampled.
-
-## We can lose signal without changing normalized binding EC50
-
-Begin with the simplest useful limit: one class of accessible sites at equilibrium, one-site binding, and enough ligand that binding does not appreciably deplete the free concentration. The model's fractional occupancy is:
+Ligand conservation changes the result. If a substantial fraction of added antibody binds the cells, the total concentration dispensed into a well exceeds the free concentration available for binding; equilibrium binding analyses must account for that depletion ([Hulme and Trevethick, 2010](https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/)). For the model's one-site system, half occupancy requires free ligand \(K\), with half the receptor population holding bound ligand:
 
 \[
-\theta(C)=\frac{C}{K+C}.
-\]
-
-If signal is proportional to bound antibody, the arithmetic mean across the whole population is proportional to:
-
-\[
-S(C)\propto p\rho\theta(C).
-\]
-
-Reducing \(p\), \(\rho\), or both lowers the plateau. But dividing each curve by its own plateau removes \(p\rho\), leaving the same normalized curve and the same midpoint, \(K\).
-
-This is the first important failure of intuitive interpretation. A substantial loss of cellular target can coexist with an unchanged normalized EC50.
-
-Gating can conceal a different part of the change. If only the positive fraction declines, a positive-only arithmetic mean can remain unchanged while the all-cell mean falls; the retained positive cells have not necessarily changed, but the population has.
-
-That calculation is not a model of median fluorescence or a threshold-defined positive gate. The exact summary statistic matters because it determines which aspect of the population survives into the reported endpoint.
-
-## We can obtain a lower EC50 from a deteriorating assay substrate
-
-Now conserve ligand. The total concentration added to the well need not equal the free concentration available for binding.
-
-For a one-site equilibrium system with receptor concentration \(R_T\), the total ligand concentration at half occupancy is:
-
-\[
+R_T=\frac{Np\rho}{N_A V},\qquad
 EC_{50,\mathrm{total}}=K+\frac{R_T}{2}.
 \]
 
-This follows from free ligand equaling \(K\) at half occupancy, with half the receptor population holding bound ligand ([Hulme and Trevethick, 2010](https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/)).
+Here \(N\) is cell number, \(N_A\) Avogadro's constant, and \(V\) volume in liters; the first expression gives molar receptor concentration. In an illustrative well containing 100,000 cells, 100,000 accessible sites per cell, a positive fraction of one, and 100 µL, \(R_T\) is approximately 0.166 nM. With \(K=1\) nM, the calculated midpoint is approximately 1.083 nM; a tenfold density reduction lowers it to approximately 1.008 nM.
 
-In the model, \(R_T\) depends on cell number, positive fraction, sites per positive cell, and assay volume. Loss of accessible target reduces ligand consumption, allowing half occupancy at a lower total antibody concentration.
+That small shift is as informative as the qualitative mechanism. Depletion should not be invoked to explain a large observed change without checking whether the receptor concentration is large enough. The model permits stronger depletion, but a parameter slider is not evidence that a particular laboratory operates in that regime.
 
-The signal can therefore fall while the apparent EC50 shifts left. The antibody parameter has not improved; the assay contains less target to consume it.
+Full-length antibodies add mechanisms that this calculation omits. Rituximab measurements on Daudi cells demonstrate bivalent stabilization and concentration-dependent binding dynamics, so a single one-site \(K\) is not a complete description of cellular antibody binding ([Bondza et al., 2020](https://doi.org/10.1080/19420862.2020.1792673)). Reduced density could relieve depletion while also reducing avidity, with opposing consequences for an apparent midpoint.
 
-This is not a universal prediction for an unstable engineered line. The one-site model deliberately excludes full-length antibody avidity, receptor organization, trafficking, and nonequilibrium retention; rituximab binding studies on Daudi cells demonstrate bivalent stabilization and concentration-dependent dynamics that can complicate a simple molecular-affinity interpretation ([Bondza and colleagues, 2020](https://doi.org/10.1080/19420862.2020.1792673)).
+![Published SPR panels showing Fc variant binding at low, medium, and high FcRn surface densities and its pH dependence.](../web/resources/lee-2019-fcrn-density.png)
 
-The point is not that expression loss must shift EC50 left. It is that “lower EC50 means better antibody” fails even in a simple, physically interpretable system.
+Figure 2. Receptor presentation changes the observed binding behavior. Cropped panels b and c from Figure 1 of [Lee et al., 2019](https://pmc.ncbi.nlm.nih.gov/articles/PMC6834678/): IgG variants at 800 nM binding immobilized human FcRn–β2m at 500, 2,000, or 4,000 response units; panel b is at pH 7.4, and panel c varies pH, with binding normalized to the response at pH 6.0. Error bars in panel c are standard deviations from three independent experiments. This is Fc–FcRn SPR evidence, not rituximab–CD20 binding or an engineered-cell passage study. © The Authors 2019, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); panels cropped, data and labels unchanged. The paper's [publisher correction](https://pmc.ncbi.nlm.nih.gov/articles/PMC6877538/) concerns panel 1d, which is not reproduced here.
 
-## We can compare binding and blocking only after defining what is blocked
+The density experiment matters because it prevents the simple depletion model from becoming a universal story. At neutral pH, the Fc variants do not all respond identically to the tested FcRn surface densities; the method context exposes construct-dependent behavior ([Lee et al., 2019](https://pmc.ncbi.nlm.nih.gov/articles/PMC6834678/)). A stable control in one binding context cannot establish that every test molecule is equally insensitive to a change in presentation.
 
-Direct binding asks how much labeled or detected antibody associates with the cell as antibody concentration increases. Competitive blocking asks how an unlabeled competitor reduces the binding of a specified tracer.
+## Binding, competition, and function have different denominators
 
-These are related but distinct observables. Fluorescent-rituximab displacement from Raji CD20 has been used as a competition-binding assay, separately from downstream functional activities ([Visser and colleagues, 2013](https://d-nb.info/1196862753/34)).
+“Blocking” needs an object. Displacing a fluorescent antibody from CD20, inhibiting a receptor's ligand interaction, and reducing a downstream cellular response are different experiments; published rituximab comparability work distinguishes fluorescent-rituximab competition on Raji cells from functional CDC and ADCC measurements ([Visser et al., 2013](https://d-nb.info/1196862753/34)). An IC50 label does not specify which experiment was performed.
 
-For the model's ideal homologous tracer, with the same one-site \(K\), negligible depletion, and tracer concentration \(T\):
+For an ideal homologous competition assay, tracer and competitor have the same one-site binding constant \(K\), binding is mutually exclusive and at equilibrium, and neither ligand is appreciably depleted. With free tracer concentration \(T\), the model gives:
 
 \[
 EC_{50,\mathrm{binding}}=K,\qquad
 IC_{50,\mathrm{competition}}=K+T.
 \]
 
-The competition relationship is a special case of the free-ligand competition equations, not a universal conversion using total concentrations under arbitrary assay conditions ([Hulme and Trevethick, 2010](https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/)).
+This is a special case of equilibrium competition relationships, not a universal conversion between total-concentration midpoints ([Hulme and Trevethick, 2010](https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/)). Increasing tracer concentration can move the blocking midpoint without changing either the antibody or its direct-binding midpoint. The finite-bath version of the tool instead solves conservation for receptor, tracer, and competitor.
 
-Changing tracer concentration can change the blocking midpoint without changing the antibody or the direct-binding midpoint. With finite ligand supply, the model instead solves conservation of receptor, tracer, and competitor.
-
-Calling both results “potency” does not make the endpoints interchangeable. Their relationship depends on the assay mechanism and the quantities held fixed.
-
-## Functional blockade adds another biological map
-
-A downstream inhibition assay needs something beyond occupancy: a relationship between occupied target and measured function. Binding alone does not specify that relationship.
-
-To make the distinction executable, the model includes a separate, explicitly generic reporter. It assumes that occupied tracer sites per positive cell, \(x\), drive a response:
-
-\[
-F(x)=\frac{x^h}{S_{50}^h+x^h}.
-\]
-
-This is not CD20 signaling, CDC, ADCC, or rituximab pharmacology. It is an assumed transfer function used to examine what a functional readout adds to the inference.
-
-For \(h=1\) without depletion, its normalized inhibition midpoint is:
+Function adds an occupancy-to-response relationship. To make that extra assumption inspectable, the tool includes a generic reporter in which occupied tracer sites per positive cell, \(x\), drive \(F(x)=x/(S_{50}+x)\). In the nondepleting limit, normalizing inhibition to the unblocked response produces:
 
 \[
 IC_{50,\mathrm{reporter}}
 =(K+T)\left(1+\frac{x(0)}{S_{50}}\right).
 \]
 
-The extra factor represents response reserve in this constructed system. A high initial occupied-site count can support substantial response even after considerable displacement; reducing density reduces that reserve and can lower the reporter IC50 while the binding parameter stays unchanged.
+The additional factor is response reserve in this constructed system. Reducing sites per positive cell lowers the baseline occupied-site count and the reserve, allowing the reporter's inhibition midpoint to shift left while \(K\) remains fixed. By contrast, reducing only the positive fraction cancels from normalized inhibition in this homogeneous, background-free model because it scales both baseline and inhibited population signals equally.
 
-An apparent gain in functional blocking potency can therefore accompany loss of cellular response capacity. Whether this explanation applies to a real assay requires the relevant response model and independent measurements, not a persuasive fit to a single midpoint.
+This reporter is not CD20 signaling, CDC, ADCC, or a fitted model of rituximab pharmacology. It demonstrates why a functional midpoint needs an additional biological map. A real assay would require independent evidence for that map and attention to its background, heterogeneity, time dependence, and maximal response.
 
-## Pharmaceutical practice: stage and GMP are not the same axis
+That distinction connects directly to [“The IC50 Belongs to the Plate,” CC](https://www.linkedin.com/pulse/ic50-belongs-plate-ermelinda-damko-9vose), which separates engagement measurements from functional inhibition shaped by stimulus, amplification, receptor reserve, and assay conditions. The present model narrows that argument into a testable question: which part of the concentration-response relationship changes when cell state changes but the binding parameter does not? Recognizing the relevant mechanism allows us to choose between measuring free ligand, quantifying accessible target, or interrogating the downstream response, rather than simply collecting another midpoint.
 
-Early-stage, late-stage and GMP are not three successive levels of scientific truth. Development stage describes how much product and method knowledge is available and which decisions the assay must support; GMP describes the quality-system controls governing applicable manufacturing and testing activities, including clinical manufacture ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031), [FDA, CGMP for Phase 1 Investigational Drugs](https://www.fda.gov/media/70975/download)).
+![Published Raji experiments comparing C1q deposition and complement-dependent cytotoxicity for rituximab Fc variants.](../web/resources/lee-2019-raji-function.png)
 
-This distinction is grounded in pharmaceutical practice, not only in abstract guidance. White and colleagues' cross-company bioassay paper includes authors from organizations such as GSK, Pfizer, AbbVie, Takeda, Genentech and BioPhorum, and describes qualification as demonstrating suitability in early product development while full validation uses a preapproved protocol with acceptance criteria for later development and commercialization ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)). A CASSS-hosted workshop by AstraZeneca scientists Scott Umlauf and Patrick Hussmann illustrates the operational progression from development and method lock to qualification, transfer into clinical QC, release/stability testing and trending, then commercial transfer and validation ([Umlauf and Hussmann, Introduction to Bioassay Development](https://www.casss.org/docs/default-source/bioassays/2024-speaker-presentations/workshop-introduction-to-bioassay-development.pdf?sfvrsn=ce9702a3_6)).
+Figure 3. A functional assay contains biology beyond target occupancy. Cropped panels b and c from Figure 3 of [Lee et al., 2019](https://pmc.ncbi.nlm.nih.gov/articles/PMC6834678/) show C1q deposition and complement-dependent cytotoxicity on Raji cells for rituximab Fc variants. The authors report CDC midpoints of 0.7 ± 0.1 µg/mL for DHS, 1.5 ± 0.1 for wild type, and 1.9 ± 0.1 for LS; error bars represent standard deviations from triplicate experiments. These are deliberately different Fc constructs, not lots of an unchanged molecule; the panels neither establish equivalent CD20 binding nor represent functional “blocking.” © The Authors 2019, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); panels cropped, data and labels unchanged.
 
-### Why the standards differ
+The primary-paper example supplies a biological boundary for the generic model. C1q recruitment and cell killing are different readouts, and Fc engineering can alter these activities on the same named target-cell line ([Lee et al., 2019](https://pmc.ncbi.nlm.nih.gov/articles/PMC6834678/)). Calling a binding assay and a functional assay “potency assays” does not establish an equivalence relation between their midpoints.
 
-| Context | Decision being supported | Evidence and controls emphasized | What that context does not establish |
-|---|---|---|---|
-| Early discovery / exploratory assay | Which candidate, mechanism or experiment should be pursued? | Biological relevance, appropriate controls, supported concentration-response behavior, independent-run reproducibility sufficient for the decision, and transparent protocol/version history ([Assay Guidance Manual](https://www.ncbi.nlm.nih.gov/books/NBK83783/)). | A provisional ranking is not a release claim or proof that values transfer across methods, cells or years. |
-| Late-stage product QC | Can the procedure support clinically informed product specifications, stability assessment and routine testing? | Defined intended use and reportable result; suitable reference material; documented validation, precision, accuracy, range and suitability; robustness, transfer capability and ongoing monitoring ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf), [ICH Q2(R2)](https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf), [ICH Q14](https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf)). | Validation and passing specifications do not establish every proposed cross-assay or product-comparability claim ([ICH Q5E](https://database.ich.org/sites/default/files/Q5E%20Guideline.pdf)). |
-| GMP laboratory execution, at applicable development stages | Can the reported result be trusted, reconstructed, reviewed and used within the applicable quality system? | Controlled procedures and equipment; attributable, contemporaneous and complete records; appropriate access controls and audit trails; review of all data; scientifically justified investigation of invalidated or unexpected results ([FDA, Phase 1 CGMP](https://www.fda.gov/media/70975/download), [FDA, Data Integrity and Compliance With Drug CGMP](https://www.fda.gov/media/119267/download)). | A controlled record does not resolve a confounded experimental design or make a biologically irrelevant endpoint relevant. |
+There is a useful connection beyond antibodies. [“The Mechanistic Void in Molecular Glue Design,” XIX](https://www.linkedin.com/pulse/mechanistic-void-molecular-glue-design-ermelinda-damko-cbmze) examines why ternary-complex formation does not by itself establish productive degradation. The missing biology differs from complement recruitment, but the interpretive obligation is similar: an upstream association measurement cannot stand in for the downstream sequence without evidence that the intervening steps are productive. The analogy identifies a question to test; it does not imply that receptor reserve and ubiquitination geometry share a quantitative model.
 
-The differences arise from intended use, consequence of error, accumulated knowledge and the need to transfer the method beyond its developers, not permission for one laboratory to be careless. Industry recommendations therefore emphasize understanding assay-critical reagents and steps early, using the intended QC equipment and loading order in relevant studies, and establishing a procedure that a receiving laboratory can operate reliably ([White et al.](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)).
+## What a reference and a bridge can recover
 
-Early discovery must also be distinguished from early clinical lot testing. In the United States, most Phase 1 investigational drugs covered by FDA's guidance are exempt from 21 CFR part 211 under 21 CFR 210.2(c), but not from statutory CGMP; the guidance still calls for suitable and reliable tests, written methods, controlled testing conditions, calibrated equipment, records of all test results and procedural changes, and defined QC responsibilities, with stated exceptions to the exemption ([FDA, CGMP for Phase 1 Investigational Drugs](https://www.fda.gov/media/70975/download)). “Early stage” is therefore not a blanket justification for untraceable results or an unassessed clinical-release method.
+Different protocols do not make every comparison impossible. In the WHO rituximab standardization study, laboratories used different cell-binding procedures, yet calibration against a common candidate standard substantially reduced the reported between-laboratory dispersion of relative potency estimates ([Prior et al., 2018](https://pmc.ncbi.nlm.nih.gov/articles/PMC5836816/)). For sample C in the binding-assay summary, the geometric coefficient of variation was 29% against in-house references and 7% against the common candidate, although the contributing laboratory counts differed, four versus five ([Prior et al., 2018](https://pmc.ncbi.nlm.nih.gov/articles/PMC5836816/)).
 
-### What GMP adds, and what it cannot repair
+That is useful opposing evidence to an overly strict demand for identical protocols. The comparison became more interpretable through shared material and calibration, not because raw EC50 values acquired universal meaning; the small binding subset and changed laboratory composition also prevent treating 29-to-7 as a universal improvement factor ([Prior et al., 2018](https://pmc.ncbi.nlm.nih.gov/articles/PMC5836816/)). A common standard supports a defined activity scale, while a reference medicinal product serves a different role in biosimilarity assessment ([Coxon et al., 2019](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3000338)).
 
-GMP adds a controlled and reconstructable path from sample to reportable result. FDA's data-integrity guidance addresses original data and metadata, access and audit trails, review, and retention of passing, failing and suspect data; invalidating a result requires a documented, scientifically sound justification, and testing repeatedly until a passing result is obtained is not an acceptable substitute ([FDA, Data Integrity and Compliance With Drug CGMP](https://www.fda.gov/media/119267/download)).
+For the historical two-lot problem, a crossed bridge measures both lots under both methods within complete independent experimental blocks. It estimates the lot contrast under each method and their ratio:
 
-For bioassays, that discipline means the identity and history of cells, reference standards and critical reagents, the approved calculation and reportable-result definition, and the disposition of unsuitable runs cannot be replaced by a final EC50 spreadsheet. The AstraZeneca workshop makes these operational issues concrete through analyst and cell-culture training, equipment and software considerations, reference-standard bridging, independent assay-control trending, and a prespecified definition of the reportable value ([Umlauf and Hussmann](https://www.casss.org/docs/default-source/bioassays/2024-speaker-presentations/workshop-introduction-to-bioassay-development.pdf?sfvrsn=ce9702a3_6)).
+\[
+r_P=\frac{E_{B,P}}{E_{A,P}},\qquad
+r_Q=\frac{E_{B,Q}}{E_{A,Q}},\qquad
+I=\frac{r_Q}{r_P}.
+\]
 
-These controls protect the record and the procedure, but do not identify a lot effect from an old-lot/old-method versus new-lot/new-method comparison. In the model's figure, a perfectly preserved record could still support the wrong biological attribution if the confounded historical ratio were interpreted as lot equivalence.
+The first two quantities describe conditional lot contrasts. The third asks whether that contrast changes with method context. In the simple multiplicative model, a common method shift cancels within each ratio; a differential response does not. Even a detected interaction does not by itself identify which preparation or biological component caused it.
 
-### Which references guide which part of the work
+The [crossed-bridge module](https://datarichinsightpoor.github.io/comparability-check/#bridge) analyzes paired log contrasts and preserves their within-block dependence. It also refuses the scientific interpretation that mixing binding and blocking endpoints creates a single lot-equivalence analysis. An interaction near one would support transport of a specified contrast only within the tested domain and uncertainty.
 
-USP's complementary bioassay chapters provide a useful division of labor: ⟨1032⟩ addresses design and development, ⟨1033⟩ addresses intended-use validation of biological-activity methods, and ⟨1034⟩ addresses analysis ([USP ⟨1032⟩](https://doi.usp.org/USPNF/USPNF_M1354_01_01.html), [USP ⟨1033⟩](https://doi.usp.org/USPNF/USPNF_M912_02_01.html), [USP ⟨1034⟩](https://doi.usp.org/USPNF/USPNF_M5677_02_01.html)). The linked public previews establish that scope, not a substitute for checking the applicable current compendial text, product commitments and jurisdiction.
+A midpoint ratio still requires a supported curve relationship before it becomes a single relative potency. Industry bioassay practice emphasizes adequate response-curve similarity, including relevant slope and asymptote behavior ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)). For normalized Hill curves, the concentration producing response fraction \(f\) is:
 
-Industry workshops and best-practice papers help translate those principles into workable procedures; their example sample counts, acceptance windows and development timelines are not universal requirements. In particular, a nonsignificant difference test is not an equivalence demonstration, regardless of whether an example bridging workflow mentions paired testing; the comparison still needs an appropriate estimand, justified margins and a suitable statistical decision rule ([White et al.](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031), [Umlauf and Hussmann](https://www.casss.org/docs/default-source/bioassays/2024-speaker-presentations/workshop-introduction-to-bioassay-development.pdf?sfvrsn=ce9702a3_6), [Lakens, 2017](https://pmc.ncbi.nlm.nih.gov/articles/PMC5502906/)).
+\[
+C(f)=E\left(\frac{f}{1-f}\right)^{1/h}.
+\]
 
-The relevant question is consequently not which laboratory label sounds most rigorous. It is whether the biological measurement, analytical performance, comparison design and quality-system controls jointly support the claim being made.
+With identical midpoints and slopes of one and two, the model gives B/A concentration ratios of 2 at 20% response, 1 at 50%, and 0.5 at 80%. One midpoint ratio hides an effect-level-dependent contrast. This tool reports B/A EC50 ratios; when a valid horizontal-shift model supports relative potency, B's potency relative to A uses the reciprocal concentration ratio.
 
-## In late-stage QC, comparability is a controlled claim
+## Why early discovery, late development, and GMP differ
 
-Late-stage development changes the burden of evidence, not the meaning of an EC50. ICH Q6B calls for a relevant, validated potency assay in the specifications for the biological drug substance and/or product, supported by appropriately characterized reference materials; Q2(R2) and Q14 principally address commercial release and stability procedures, with scientific principles applicable in a phase-appropriate manner during clinical development ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf), [ICH Q2(R2), final with 2025 corrections](https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf), [ICH Q14, final with 2025 corrections](https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf)).
+Development stage and GMP describe different axes. Stage concerns the available product knowledge and the decision the assay must support; GMP concerns the applicable quality system governing manufacture and testing, including relevant clinical-stage activities ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031); [FDA Phase 1 CGMP guidance](https://www.fda.gov/media/70975/download)). They should not be arranged as three successive grades of biological truth.
 
-The practical framework is therefore not “use 80–125% and run more replicates.” It is to define what is being measured, establish that the procedure can measure it reliably enough for the decision, and maintain that capability as materials and methods change.
+Early discovery may need to discriminate candidates well enough to choose the next experiment. It still needs biologically relevant controls, reproducible concentration-response measurements, and an understanding of the variation that could reverse the decision ([Assay Guidance Manual](https://www.ncbi.nlm.nih.gov/books/NBK83783/)). A carefully bounded statement about a candidate under one assay context can be useful before its potency has been shown to transfer across laboratories or years.
 
-### Four decisions that must not be collapsed
+The risk is borrowing the appearance of QC without its supporting measurement system. A low within-plate CV describes only part of precision, and Z′ describes control-signal separation rather than establishing agreement between potency estimates; the Assay Guidance Manual treats plate performance, replicate-experiment reproducibility, and assay-change comparisons separately ([Assay Guidance Manual](https://www.ncbi.nlm.nih.gov/books/NBK83783/)). Technical wells cannot substitute for the missing independent days, preparations, and cell states.
 
-- **Is the analytical result valid?** System suitability asks whether the measurement system and analytical operations performed acceptably; sample suitability, where required, asks whether the particular test sample gives an acceptable response, including relevant similarity to the reference ([ICH Q14](https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf)).
-- **Is the procedure fit for its intended use?** Validation evaluates predefined performance characteristics such as specificity/selectivity, accuracy, precision and reportable range; it is not a finding that any two lots are equivalent ([ICH Q2(R2)](https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf)).
-- **Does this lot meet its release specification?** Product specifications are justified in relation to relevant development, clinical, manufacturing-consistency and stability experience, rather than being generic similarity limits between two curves ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf)).
-- **Has a particular comparison been established?** Analytical-method bridging and manufacturing-change product comparability are distinct exercises: Q14 addresses the former, while Q5E addresses the latter and states that routine specification tests alone are generally not adequate to assess manufacturing-change impact ([ICH Q14](https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf), [ICH Q5E](https://database.ich.org/sites/default/files/Q5E%20Guideline.pdf)).
+For the engineered-cell scenario, I would initially ask whether the candidate ranking survives changes in positive fraction, density, cell number, tracer concentration, and response definition. That is a sensitivity question before it is an equivalence question. A provisional result may be sufficient for an exploratory decision while remaining unsuitable for pooled historical ranking.
 
-Two passing lots are therefore not automatically equivalent, and two similar curves do not establish whole-product comparability. Q5E explicitly notes that results can remain within specifications yet move outside historical control trends in a way that warrants further investigation ([ICH Q5E](https://database.ich.org/sites/default/files/Q5E%20Guideline.pdf)).
+Late-stage QC has a more durable intended use: a method must support defined product specifications and stability assessment beyond the hands of its developers. ICH Q6B calls for relevant validated potency measurement and appropriately characterized reference materials, while Q2(R2) addresses validation and Q14 addresses development, control strategy, and lifecycle management ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf); [ICH Q2(R2)](https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf); [ICH Q14](https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf)).
 
-### What makes the comparison defensible
+Pharmaceutical practice makes the progression concrete. White and colleagues distinguish early qualification for intended use from later validation against preapproved criteria, and the CASSS workshop by Scott Umlauf and Patrick Hussmann follows development, method lock, qualification, clinical QC transfer, routine trending, and commercial transfer ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031); [Introduction to Bioassay Development](https://www.casss.org/docs/default-source/bioassays/2024-speaker-presentations/workshop-introduction-to-bioassay-development.pdf?sfvrsn=ce9702a3_6)). These are sources of scientific and operational practice, not a universal schedule or mandatory replicate count.
 
-Start with biological relevance. Binding assays may be acceptable potency procedures, but that choice needs a product-specific rationale; a binding midpoint should not be assumed to represent all functional activities of a molecule with multiple mechanisms ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf), [ICH Q5E](https://database.ich.org/sites/default/files/Q5E%20Guideline.pdf)). Conversely, a cell-based readout is not automatically the better QC assay simply because it is more complex; the mechanism, discriminatory capability, variability and intended use determine the appropriate strategy ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)).
+GMP adds a controlled, reconstructable path from sample to reportable result, including original data and metadata, review, appropriate access controls, audit trails, and scientifically justified investigations of suspect or invalidated results ([FDA data-integrity guidance](https://www.fda.gov/media/119267/download)). Those controls make the record trustworthy without repairing an unidentified lot effect. A complete audit trail can preserve a confounded experiment perfectly.
 
-Reference continuity is equally important. Q6B describes a characterized in-house primary reference representative of production and clinical materials, working references calibrated against it, appropriate calibration to international or national standards when available, and documentation supporting reference-material stability ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf)). A reference is not a timeless denominator: replacement, storage and response behavior belong to the measurement system, while controls and their curve characteristics should be monitored for stability ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)).
+Early clinical manufacture also should not be conflated with unconstrained exploratory research. In the United States, most Phase 1 investigational drugs covered by FDA's guidance are exempt from 21 CFR part 211 under the specified provision, but not from statutory CGMP; suitable tests, written procedures, controlled conditions, calibration, records, and defined QC responsibilities still matter ([FDA Phase 1 CGMP guidance](https://www.fda.gov/media/70975/download)). Phase appropriateness changes the evidence and controls justified for the use, not the obligation to understand what the result means.
 
-The result also needs a supported curve model. A single relative potency assumes an adequately similar response relationship between sample and reference; if slope or asymptote differences exceed justified suitability criteria, an inflection-point ratio is not enough ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)). Define the ratio direction explicitly: this model reports B/A EC50 ratios, whereas, under a supported horizontal-shift model, the relative potency of B versus A is conventionally proportional to the reciprocal concentration ratio.
+## The QC claim has several separate conditions
 
-Precision must correspond to the reportable result. Repeatability, intermediate precision across analysts/days/preparations, accuracy and acceptable response should be established across the intended range, not inferred from a tight triplicate at one nominal potency ([ICH Q2(R2)](https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf)). The number of independent runs averaged into a reportable potency value should be justified using assay-performance information, with attention to correlations when runs share an analyst or day; counting more wells does not estimate the missing run-to-run component ([Li et al., online 2024; issue 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC11788244/)).
+An acceptable run, a validated procedure, a passing product lot, and a demonstrated comparison answer different questions. System and sample suitability address whether the particular measurement is interpretable; validation establishes procedure performance for intended use; specifications judge a product against justified requirements; method bridging or manufacturing-change comparability addresses a defined change ([ICH Q14](https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf); [ICH Q2(R2)](https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf); [ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf); [ICH Q5E](https://database.ich.org/sites/default/files/Q5E%20Guideline.pdf)).
 
-Finally, validation is not a permanent exemption from change. Q14 calls for an analytical procedure control strategy, recommends ongoing monitoring, and links the extent of bridging or revalidation to the risk and nature of the change; its biological-potency example explicitly considers cell density, viability and passage-dependent performance ([ICH Q14](https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf)). A passage range, reagent lot, reference preparation, readout algorithm or replacement cell bank should therefore be evaluated for its effect on the intended measurement, not treated as harmless because the SOP title is unchanged.
+Two lots inside specification are not thereby equivalent to each other. Q5E states that routine specification tests alone are generally insufficient to assess a manufacturing change and notes that within-specification results can nevertheless depart from historical trends in a way that warrants investigation ([ICH Q5E](https://database.ich.org/sites/default/files/Q5E%20Guideline.pdf)). Product comparability is broader than either a passing potency value or a matching pair of binding curves.
 
-These are a scientific framework, not a universal numerical recipe. Q2(R2)'s biological-assay examples and Q14's case-study criteria are illustrative, and neither establishes a general 0.8–1.25 lot-equivalence requirement; a formal analytical target profile can be useful, but Q14 does not make its formal documentation or submission universally mandatory ([ICH Q2(R2)](https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf), [ICH Q14](https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf)).
+A defensible potency comparison needs a biologically relevant endpoint, reference continuity, suitable curve behavior, and precision appropriate to the reportable result. Binding can be an acceptable potency approach with a product-specific rationale; a more complex cell-based assay is not automatically more informative or more suitable simply because it contains more biology ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf); [White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)). Discriminatory capability and the consequence of missing a relevant change matter.
 
-## In early discovery, a useful comparison is not yet a transferable one
+The reportable-result definition determines which precision is relevant. Li and colleagues distinguish individual-run variability from the variability of results formed by combining runs, with attention to repeatability, intermediate precision, and the design used to estimate them ([Li et al., 2025, published online 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11788244/)). Averaging independent runs can help; assuming independence when runs share important sources of variation can overstate that help.
 
-Early-stage assays often exist to prioritize candidates, explore mechanism, or decide which experiment to run next. That is a different intended use from batch release, but it does not remove the need for biological relevance, appropriate controls and evidence that the assay can resolve the differences driving the decision ([Assay Guidance Manual, HTS Assay Validation](https://www.ncbi.nlm.nih.gov/books/NBK83783/)).
+Reference replacement and cell-bank replacement are analytical events. A primary reference, calibrated working references, their stability, and ongoing monitoring maintain the interpretation of the reported scale, while Q14's biological-potency example explicitly considers cell density, viability, and passage-dependent performance ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf); [ICH Q14](https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf)). Keeping the SOP title unchanged does not establish that the measurement system stayed unchanged.
 
-The central pitfall is borrowing the authority of late-stage QC while omitting the supporting measurement system. A precise-looking EC50, a familiar reference antibody and a low within-plate CV can make an exploratory comparison look settled even when the endpoint, population, normalization or protocol is still moving.
+USP's bioassay chapters provide a complementary division of labor: ⟨1032⟩ for design and development, ⟨1033⟩ for validation, and ⟨1034⟩ for analysis; the public previews establish their scope, not a substitute for checking applicable current compendial text and product commitments ([USP ⟨1032⟩](https://doi.usp.org/USPNF/USPNF_M1354_01_01.html); [USP ⟨1033⟩](https://doi.usp.org/USPNF/USPNF_M912_02_01.html); [USP ⟨1034⟩](https://doi.usp.org/USPNF/USPNF_M5677_02_01.html)). No generic 80–125% window should be imported from this teaching model as a bioassay standard.
 
-### Where early comparisons become overclaims
+Equivalence requires a justified margin, an appropriate design, and uncertainty small enough to support the claim; a nonsignificant difference test does not demonstrate equivalence ([Lakens, 2017](https://pmc.ncbi.nlm.nih.gov/articles/PMC5502906/)). The model's [QC and discovery guide](https://datarichinsightpoor.github.io/comparability-check/#guidance-pharma) keeps these decisions separate rather than compressing them into a single pass/fail badge.
 
-- **A good plate is mistaken for reproducible potency.** Z′ evaluates control-signal separation, whereas potency reproducibility and agreement across runs are separate questions; the Assay Guidance Manual treats these through separate plate-uniformity and replicate-experiment assessments ([Assay Guidance Manual](https://www.ncbi.nlm.nih.gov/books/NBK83783/)).
-- **Technical replication is mistaken for independent evidence.** Within-run and between-run variation contribute differently to comparisons, and cross-run ranking must account for both; adding wells to one preparation cannot demonstrate robustness across days, reagent preparations or cell states ([Assay Guidance Manual](https://www.ncbi.nlm.nih.gov/books/NBK83783/), [Li et al.](https://pmc.ncbi.nlm.nih.gov/articles/PMC11788244/)).
-- **A benchmark is treated as a universal correction factor.** In this model, a shared method multiplier cancels in a within-method ratio, but differential responses to the method do not. The benchmark's apparent stability is therefore a reason to investigate transferability, not proof that every test antibody is equally insensitive to the changed context.
-- **Different curves are forced into one ranking.** Candidate molecules may differ in maximal response, curve shape or binding behavior; a ratio of midpoints cannot carry a single relative-potency interpretation when the required response similarity is unsupported ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)). Preserve those differences as observations rather than normalizing them away to create an apparently uniform potency column.
-- **Historical results are pooled before the assays are bridged.** The Assay Guidance Manual specifically calls for assay-comparison work when changed methods will be combined with earlier results, and advises against combining data into one set when the assays are not equivalent for that purpose ([Assay Guidance Manual](https://www.ncbi.nlm.nih.gov/books/NBK83783/)).
-- **A screening threshold is imported into QC, or vice versa.** The manual's MSR and agreement-limit recommendations address its specified HTS/lead-optimization use case; they are not generic biologic-product specifications, just as this figure's 0.8–1.25 margins are not regulatory acceptance criteria ([Assay Guidance Manual](https://www.ncbi.nlm.nih.gov/books/NBK83783/), [ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf)).
+## The executable argument
 
-For Raji versus an unstable engineered population, the practical early-stage question is not initially “are these EC50s equivalent?” It is “does the ranking or mechanistic conclusion survive the changes in positive fraction, receptor density, ligand availability and endpoint definition?” Those are the deliberately separated interventions in the model, not claims that a single cellular mechanism explains all observed shifts.
+The mathematics is useful because it can be challenged one assumption at a time. The [cell-context implementation](https://github.com/dataRichinsightPoor/comparability-check/blob/v0.6.0/web/context-model.mjs) keeps depletion, positive fraction, sites per positive cell, tracer concentration, gating, and the generic reporter explicit; the [simulation implementation](https://github.com/dataRichinsightPoor/comparability-check/blob/v0.6.0/web/simulation-model.mjs) keeps the noise structure and decision rules inspectable.
 
-As a practical recommendation, preserve the full curves and assay metadata, retain suitable comparison materials where possible, and run overlapping samples under both versions before pooling their results. Choose an informative panel rather than only the most convenient reference, and define in advance which differences would alter the next development decision; this follows the distinction between reproducibility studies and assay-change comparisons in the Assay Guidance Manual, without treating its example designs as universal templates ([Assay Guidance Manual](https://www.ncbi.nlm.nih.gov/books/NBK83783/)).
+This is how the executable tools serve the series' interpretive purpose. They make an explanation accountable to its assumptions: hold the molecule fixed, change one cellular or analytical quantity, and ask whether the proposed conclusion still follows. A model-generated match cannot establish that the explanation is true in the laboratory, but a competing explanation that produces the same result identifies a measurement the current evidence is missing.
 
-For an archive comparison years apart, retained material is useful only if its current condition can be interpreted. Storage, aging and freeze–thaw history can add a material-state contrast to the lot and method contrasts, so a re-test needs to consider sample and reference stability rather than assume that an old vial recreates the old experiment ([ICH Q6B](https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf), [White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)).
+The following JavaScript reproduces the illustrative receptor-concentration calculation using the model's exported function. Its input units are cells, sites per positive cell, positive fraction, and microliters, with output in nanomolar:
 
-The defensible early conclusion may be conditional: “under this method, with these cells and controls, this preparation required a lower concentration to reach the defined response.” That can be sufficient to choose the next experiment. It is not yet a claim of intrinsic affinity, transferable potency, or QC comparability.
+```js
+import { receptorConcentration } from "./web/context-model.mjs";
 
-## Comparable for which conclusion?
+const K = 1; // nM; fixed one-site parameter
+for (const density of [100000, 10000]) {
+  const RT = receptorConcentration(100000, density, 1, 100);
+  console.log({
+    density,
+    receptor_nM: RT,
+    binding_EC50_total_nM: K + RT / 2
+  });
+}
+```
 
-The useful comparison preserves the identity of the endpoint and the biological context. It does not erase them through normalization or a shared column heading.
+The historical-equivalence figure can be regenerated from the versioned repository with Node.js 20 or later. These commands write to a separate output directory rather than replacing the published result files:
 
-| Question | Evidence that moves the comparison forward | What remains insufficient |
-|---|---|---|
-| Did the reported endpoint change? | Supported estimates, consistent units, full curves, and uncertainty. | A midpoint outside the adequately measured response range. |
-| Did the antibody lot change? | Side-by-side lots under a shared, suitable assay context. | Different lots tested only in different eras or cells. |
-| Did the engineered population change? | Positive fraction and per-positive-cell expression distributions tracked across passage. | A normalized EC50 alone. |
-| Did genomic instability cause the change? | DNA-level evidence connected to expression and population history. | Surface signal loss alone. |
-| Does a lot contrast transfer between methods? | A crossed bridge with overlapping materials and an appropriate common endpoint. | Similar-looking curves or unrelated historical runs. |
-| Does binding predict functional blockade? | A defined blocking mechanism, controlled challenge, and a supported occupancy-to-response relationship. | Treating binding EC50 and functional IC50 as the same quantity. |
+```sh
+git clone https://github.com/dataRichinsightPoor/comparability-check.git
+cd comparability-check
+git checkout v0.6.0
+npm test
+node simulate.mjs 100000 26007 4 reproduced/blocks-4
+node simulate.mjs 100000 26007 8 reproduced/blocks-8
+node simulate.mjs 100000 26007 16 reproduced/blocks-16
+```
 
-The crossed-bridge module estimates lot ratios within each method and then compares those ratios. It requires complete independent experimental blocks and does not allow the scientific interpretation that mixed binding and blocking endpoints constitute one equivalence analysis.
+Each invocation evaluates all six summary-endpoint scenarios, not only the masked-lot example, and also generates a separate cell-context sensitivity ensemble. Reusing the same seed for different block counts reuses the cell-ensemble draws; it should not be described as three independent cell datasets. The figure is pinned to the v0.5.0 results, and v0.6.0 retains the same simulation algorithm.
 
-Equivalence additionally requires justified, prespecified margins and appropriate uncertainty; failure to detect a difference is not equivalent to demonstrating that a difference is acceptably small ([Lakens, 2017](https://pmc.ncbi.nlm.nih.gov/articles/PMC5502906/)).
+The [GitHub repository](https://github.com/dataRichinsightPoor/comparability-check) supplies the MIT-licensed model, tests, assumptions, and result files. The literature panels reproduced in this essay retain their stated CC BY 4.0 license and attribution rather than becoming MIT-licensed images. The browser model is a teaching and sensitivity-analysis tool, not validated software for a GMP release decision.
 
-The model's purpose is not to rescue every historical comparison with a correction. It is to identify which conclusion survives the experimental changes, which explanation remains untested, and what measurement would separate the alternatives.
+## Where the bottleneck moved
 
-To be or not to be comparable is an incomplete question. Comparable for which conclusion is the one the experiment must answer.
+For the historical comparison, the bottleneck is the missing overlap. For the unstable engineered population, it is the unmeasured cell state. For binding versus functional blockade, it is the unsupported mapping between occupancy and response. A narrower EC50 interval addresses none of those missing quantities by itself.
+
+My first discriminating experiment would cross the available lots with the relevant method contexts while preserving full curves, raw signal, positive fraction, and per-positive-cell expression. Where retained material cannot represent its historical state, I would report that limitation rather than silently convert a contemporary retest into evidence about the past. Where the endpoint changes, I would analyze the endpoints separately and test a biological relationship between them instead of pooling their midpoints.
+
+A shared, suitable context that preserves the lot contrast would support a lot-associated difference within that domain. A contrast that disappears on matching cell state would weaken the attribution to the antibody; a contrast that changes across methods would limit transferability. If direct binding remains stable while functional output moves, the next experiment belongs downstream of occupancy rather than in another binding-curve fit.
+
+Across these essays, the recurring task is to understand what must remain true for the interpretation to survive. A threshold defines the measured population; an assay's response architecture defines what its midpoint represents; productive molecular geometry determines whether association can lead to a biological consequence. These connections are valuable because they specify different ways to challenge an inference, rather than supplying a general reason to distrust measurements.
+
+The most useful standard is therefore a claim whose failure conditions are visible. A comparison earns its scope through the quantities held constant, the changes deliberately crossed, and the uncertainty left unresolved. Deeper understanding earns its place when it tells us which of those conditions matters and how to test it. “Comparable” becomes informative only when the experiment specifies the conclusion for which the comparison is intended.

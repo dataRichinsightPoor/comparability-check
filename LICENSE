@@ -19,3 +19,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Third-party material notice:
+Reproduced Lee et al. (2019) figure assets in web/resources/ and their embedded
+copies in web/article.html are excluded from this MIT grant. They are licensed
+by their authors under CC BY 4.0. See web/resources/FIGURE-CREDITS.md for source
+URLs, attribution, license links, and the modifications made.
