@@ -1,4 +1,25 @@
-# Comparability Check v0.5.0
+# Comparability Check v0.6.0
+
+Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07
+
+This release brings the expanded scientific guidance and publication figure into the live model. It does not change the numerical algorithms or treat the illustrative margins as regulatory criteria.
+
+## Added to the live model
+
+- A dedicated QC & discovery tab with section-level deep links.
+- A pharmaceutical-practice section distinguishing early/late development from GMP execution, with cross-company, AstraZeneca/CASSS, USP and FDA references.
+- Late-stage QC guidance separating system/sample suitability, intended-use validation, release specifications and comparability studies.
+- Early-discovery pitfalls: technical versus independent replication, Z′ versus potency reproducibility, reference behavior, curve similarity and unbridged historical pooling.
+- Inline references to ICH Q6B, Q5E, corrected final Q2(R2)/Q14, White et al., Li et al. and the Assay Guidance Manual.
+- The fixed reference figure, “More data can strengthen the wrong comparison,” with an accessible numerical table and separate explanations of experimental versus Monte Carlo intervals.
+- Downloads for the full essay, 600-dpi PNG, editable SVG, source-cited caption and exact CSV values.
+- Cross-links from the bridge, methods and simulation views, plus preserved selected-view settings import/export.
+
+## Evidence boundary
+
+The figure uses the version-pinned v0.5.0 synthetic results. Changing simulation controls does not change it, and neither the figure nor this guide validates an experimental assay or establishes whole-product comparability.
+
+## Earlier release: v0.5.0
 
 Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07
 

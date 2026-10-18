@@ -1,11 +1,11 @@
 /**
- * Comparability Check v0.5.0
+ * Comparability Check v0.6.0
  * Model schema: history {earlier, later, methodMultiplier};
  * bridge [{run: string, AP, BP, AQ, BQ}], all EC50s positive in one common unit.
  * Complete rows are independent experimental blocks, NOT technical replicates.
  * Paired log contrasts preserve within-block covariance.
  */
-export const VERSION = "0.5.0";
+export const VERSION = "0.6.0";
 export const SERIES_LINE = "Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07";
 export function positive(x, name = "Value") {
   if (typeof x !== "number" || !Number.isFinite(x) || x <= 0)

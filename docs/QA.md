@@ -1,5 +1,26 @@
 # Verification record
 
+## Version 0.6 guidance-update QA inventory
+
+The requested public update adds the QC/discovery guide and the previously reviewed figure and manuscript. It does not alter numerical algorithms; the figure's data provenance remains pinned to v0.5.0.
+
+Checks for this release cover:
+
+- All eight view routes, four guidance anchors, malformed-hash rejection and unique DOM IDs.
+- Late-stage QC's four distinct decisions, linked sources, illustrative-margin caveat, and early-discovery pitfalls.
+- Figure loading, exact counts/intervals, fixed-reference labeling, full-size view, and five downloads.
+- Cross-links into and out of guidance; direct-entry hashes, reload, back navigation, and selected-view settings roundtrip.
+- Desktop, mobile and short-window layout, readable numerical fallback for the figure, scrollable table and keyboard navigation.
+- Standalone and opaque-origin iframe navigation, with existing simulation and walkthrough smoke checks.
+
+The automated suite includes 190 tests, all passing after the pharmaceutical-practice addition. Browser verification passed for direct entry and reload into the new section; anchor navigation and back navigation; cross-links to bridge, walkthrough and simulation; selected-view settings roundtrip; and all five downloadable files.
+
+The fixed figure loads at its intended aspect ratio, its full-size SVG opens, and the numerical table retains all three exact rates. The 1,000-iteration simulation smoke test completes after navigation without page errors. Representative FDA, CASSS and USP links were activated and opened at their intended destinations.
+
+Desktop (1440px), mobile (375px) and short-window (1280×600) inspections found no document-level horizontal overflow or persistent content clipping. The mobile numerical table scrolls within a labeled region. The sticky navigation fits the short viewport. Measured contrast for secondary labels, links and eyebrow labels against the page background was respectively 6.23:1, 6.81:1 and 14.72:1.
+
+The guide also opens and navigates within an opaque-origin sandbox iframe. Repeated same-hash links work after leaving and returning to the guide, and its CSV download succeeds. Numerical algorithms and the v0.5.0 reference-run outputs were not changed.
+
 ## Version 0.5 public-release verification
 
 The latest user request authorizes public GitHub publication under MIT, superseding the earlier private-preview-only scope. This section records local verification of the release candidate; older private-review entries below are historical milestones, not the current publication instruction.

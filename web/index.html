@@ -15,7 +15,7 @@
 <header class="masthead">
   <span class="brand">Data-Rich, Insight-Poor CCLX</span>
   <span class="series">99 Small Problems · No. 07</span>
-  <span class="version">v0.5.0 · MIT · Research use</span>
+  <span class="version">v0.6.0 · MIT · Research use</span>
 </header>
 <main id="main">
   <section class="intro">
@@ -35,6 +35,7 @@
     <button data-view="context" aria-pressed="false">Cells &amp; endpoints</button>
     <button data-view="bridge" aria-pressed="false">Crossed bridge</button>
     <button data-view="simulation" aria-pressed="false">Simulation lab</button>
+    <button data-view="guidance" aria-pressed="false">QC &amp; discovery</button>
     <button data-view="methods" aria-pressed="false">Methods &amp; limits</button>
   </nav>
 
@@ -210,6 +211,7 @@
         <fieldset><legend>Lot-ratio equivalence margins</legend><div class="pair-inputs"><label>Lower<input id="lower" type="number" step="any" value=".8"></label><label>Upper<input id="upper" type="number" step="any" value="1.25"></label></div></fieldset>
         <fieldset><legend>Interaction-ratio margins</legend><div class="pair-inputs"><label>Lower<input id="ilower" type="number" step="any" value=".8"></label><label>Upper<input id="iupper" type="number" step="any" value="1.25"></label></div></fieldset>
         <p class="small">0.80–1.25 is an illustrative setting, not a recommended bioassay acceptance range. Justify each margin separately before collecting confirmatory data.</p>
+        <p class="small"><a href="#guidance-qc">Distinguish equivalence margins from release specifications.</a></p>
         <label class="check"><input id="qualified" type="checkbox"><span>I have independently established assay suitability, valid independent blocks, and justified, prespecified margins for this analysis.</span></label>
         <p class="small">This declaration is not software validation of your assay. Editing margins resets it.</p>
       </aside>
@@ -231,6 +233,7 @@
   <section id="methods" class="view methods" hidden>
     <p class="eyebrow">INSPECT THE ASSUMPTIONS</p><h2>Comparable for which conclusion?</h2>
     <p>This is a bounded comparison model, not a dose-response fitter or a regulatory validation system. The historical and bridge views analyze supplied EC50 values; the cell-context view generates synthetic curves to expose different explanations, not fit or diagnose a real assay.</p>
+    <p><a href="#guidance">Read the QC and early-discovery comparison guide</a> for the distinction between a valid result, a validated method, a passing lot and a supported comparability claim.</p>
     <div class="method-grid">
       <section><h3>A checklist is not evidence verification</h3><p>The claim audit applies explicit rules to your declarations. It does not inspect raw curves or experimental records, calculate an evidence score, or turn checked boxes into proof. A potentially suitable design is not an empirical result.</p><p>Endpoint mismatch remains a barrier to a single potency contrast even when units match. Affinity, genomic causation, functional prediction and equivalence retain evidence requirements outside the checklist.</p></section>
       <section><h3>Check the approximation against the entered load</h3><p>Even with depletion disabled, the simulator calculates finite-supply ligand depletion at the binding midpoint and unchallenged tracer depletion. A value above 10% triggers a diagnostic warning rather than silently changing the curves; this is a heuristic, not an acceptance limit (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/" target="_blank" rel="noopener">Hulme &amp; Trevethick, 2010</a>).</p><p>The check compares two versions of the same stipulated one-site model. It does not validate that model for a real antibody or cell substrate.</p></section>
@@ -251,6 +254,7 @@
       <p class="eyebrow">REPEAT THE EXPERIMENT. NOT THE ASSUMPTION.</p>
       <h2>Precision cannot repair the wrong comparison.</h2>
       <p>Six seeded endpoint experiments test historical confounding, common shifts, interactions, comparator drift, equivalence boundaries, and low precision. A separate paired-cell sensitivity ensemble varies expression loss while holding the antibody parameter unchanged. These are synthetic scenarios, not measurements of rituximab lots.</p>
+      <p><a href="#guidance-figure">See the publication figure and its QC interpretation.</a> The figure uses the fixed v0.5.0 reference runs, not the settings selected below.</p>
       <div class="sim-controls">
         <label>Iterations per scenario<select id="sim-iterations"><option value="1000">1,000 · quick</option><option value="10000" selected>10,000 · standard</option><option value="100000">100,000 · stress test</option><option value="1000000">1,000,000 · extended</option></select></label>
         <label>Independent blocks<input id="sim-blocks" type="number" min="3" max="100" step="1" value="8"></label>
@@ -271,7 +275,109 @@
       <p>Read the predecessor: <a href="https://www.linkedin.com/pulse/assay-got-better-because-cells-worse-ermelinda-damko-6kvme" target="_blank" rel="noopener">Data-Rich, Insight-Poor CCI: The Assay Got Better Because the Cells Got Worse</a>. Its synthesis and simulations motivate the question, not a validated longitudinal Raji dataset. The <a href="https://github.com/dataRichinsightPoor/comparability-check/blob/main/docs/COMPARABILITY-PRINCIPLES.md" target="_blank" rel="noopener">literature-backed comparison guide</a> separates supported conclusions from unsupported leaps.</p>
     </div>
   </section>
+  <section id="guidance" class="view guidance" hidden tabindex="-1">
+    <div class="guidance-intro">
+      <p class="eyebrow">QC &amp; EARLY DISCOVERY</p>
+      <h2>Same numbers. Different standards of evidence.</h2>
+      <p>A passing lot, a valid assay result and a supported comparison are different conclusions. Use the intended decision to define the evidence you need, rather than borrowing authority from a familiar EC50 or acceptance range.</p>
+    </div>
+    <div class="guidance-layout">
+      <aside class="guidance-rail">
+        <nav aria-label="Comparison guidance sections">
+          <a href="#guidance-pharma">Stage, purpose &amp; GMP</a>
+          <a href="#guidance-qc">Late-stage QC</a>
+          <a href="#guidance-early">Early discovery</a>
+          <a href="#guidance-figure">Publication figure</a>
+        </nav>
+        <p class="small">Scientific guidance, not an automated compliance assessment. The model cannot validate an assay or establish whole-product comparability.</p>
+        <a class="button quiet" href="resources/to-be-or-not-to-be-comparable.md" download>Download full essay</a>
+      </aside>
+      <div class="guidance-body">
+        <section id="guidance-pharma" tabindex="-1">
+          <p class="eyebrow">PHARMACEUTICAL PRACTICE</p>
+          <h3>Development stage and GMP answer different questions.</h3>
+          <p>Early, late and GMP are not three successive levels of scientific truth. Stage concerns the available product knowledge and intended decision; GMP concerns the quality system governing applicable manufacture and testing, including clinical manufacture (<a href="https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031" target="_blank" rel="noopener">White et al., 2019</a>, <a href="https://www.fda.gov/media/70975/download" target="_blank" rel="noopener">FDA: Phase 1 CGMP</a>).</p>
+          <dl class="guidance-decisions">
+            <div><dt>Early discovery</dt><dd>Support provisional ranking, mechanism and the next experiment with biological relevance, controls and decision-appropriate reproducibility. This is not automatically evidence for clinical release or transfer across methods (<a href="https://www.ncbi.nlm.nih.gov/books/NBK83783/" target="_blank" rel="noopener">Assay Guidance Manual</a>).</dd></div>
+            <div><dt>Late-stage QC</dt><dd>Support defined product specifications and stability testing with an appropriate reportable result, reference, validation evidence, suitability criteria and lifecycle control. Passing specifications is not a universal comparability finding (<a href="https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf" target="_blank" rel="noopener">Q6B</a>, <a href="https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">Q2(R2)</a>, <a href="https://database.ich.org/sites/default/files/Q5E%20Guideline.pdf" target="_blank" rel="noopener">Q5E</a>).</dd></div>
+            <div><dt>GMP execution</dt><dd>Make applicable testing controlled, attributable, reconstructable and reviewable: written procedures, controlled equipment, complete data and metadata, access controls, audit trails and scientifically justified investigations. These controls do not repair a confounded design (<a href="https://www.fda.gov/media/70975/download" target="_blank" rel="noopener">FDA: Phase 1 CGMP</a>, <a href="https://www.fda.gov/media/119267/download" target="_blank" rel="noopener">FDA: Data integrity</a>).</dd></div>
+          </dl>
+          <h4>What pharmaceutical practice adds</h4>
+          <p>The cross-company paper by White and colleagues includes contributors from GSK, Pfizer, AbbVie, Takeda, Genentech and BioPhorum. It distinguishes early suitability qualification from later full validation and emphasizes critical reagents, QC-relevant equipment/loading order and transfer to a receiving laboratory (<a href="https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031" target="_blank" rel="noopener">White et al.</a>).</p>
+          <p>A CASSS-hosted workshop by AstraZeneca scientists Scott Umlauf and Patrick Hussmann illustrates the operational path from method lock and qualification to clinical QC, trending, commercial transfer and validation. Its practical examples include analyst and cell-culture training, reference bridging, independent assay-control trending and an SOP-defined reportable value; its numerical examples are not universal regulatory requirements (<a href="https://www.casss.org/docs/default-source/bioassays/2024-speaker-presentations/workshop-introduction-to-bioassay-development.pdf?sfvrsn=ce9702a3_6" target="_blank" rel="noopener">Introduction to Bioassay Development</a>).</p>
+          <div class="guidance-caution"><h4>Early discovery is not early clinical release.</h4><p>In the United States, most Phase 1 investigational drugs covered by FDA's guidance are exempt from 21 CFR part 211, but not from statutory CGMP. Suitable tests, written procedures, controlled equipment, records of all results and procedural changes, and defined QC responsibilities still matter; the guidance specifies exceptions to that exemption (<a href="https://www.fda.gov/media/70975/download" target="_blank" rel="noopener">FDA: Phase 1 CGMP</a>).</p></div>
+          <p>USP's complementary chapters address <a href="https://doi.usp.org/USPNF/USPNF_M1354_01_01.html" target="_blank" rel="noopener">⟨1032⟩ design and development</a>, <a href="https://doi.usp.org/USPNF/USPNF_M912_02_01.html" target="_blank" rel="noopener">⟨1033⟩ biological assay validation</a>, and <a href="https://doi.usp.org/USPNF/USPNF_M5677_02_01.html" target="_blank" rel="noopener">⟨1034⟩ analysis</a>. These public previews establish chapter scope, not the applicable current compendial requirements for a particular product.</p>
+          <p>GMP records include failing and suspect data, and excluding a result needs a documented, scientifically sound justification; testing repeatedly until a desired passing result is obtained is not acceptable (<a href="https://www.fda.gov/media/119267/download" target="_blank" rel="noopener">FDA: Data integrity</a>). A meticulously preserved EC50 still cannot identify a lot effect if the experiment confounds lot and method.</p>
+        </section>
+        <section id="guidance-qc" tabindex="-1">
+          <p class="eyebrow">LATE-STAGE QC</p>
+          <h3>Comparability is a controlled claim.</h3>
+          <p>ICH Q6B calls for a relevant, validated potency assay and appropriately characterized reference materials; Q2(R2) and Q14 primarily address commercial release and stability procedures, with scientific principles applicable in a phase-appropriate manner during clinical development (<a href="https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf" target="_blank" rel="noopener">Q6B</a>, <a href="https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">Q2(R2), corrected final</a>, <a href="https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">Q14, corrected final</a>). The practical question is not simply whether two midpoints fall inside a familiar range.</p>
+          <h4>Four decisions that must not be collapsed</h4>
+          <dl class="guidance-decisions">
+            <div><dt>A valid result</dt><dd>System suitability checks the measurement system and analytical operations; sample suitability, where required, checks whether the particular sample gives an acceptable response, including relevant similarity to the reference (<a href="https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">ICH Q14</a>).</dd></div>
+            <div><dt>A fit-for-purpose procedure</dt><dd>Validation evaluates predefined performance characteristics, including specificity/selectivity, accuracy, precision and reportable range. It does not establish that any two lots are equivalent (<a href="https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">ICH Q2(R2)</a>).</dd></div>
+            <div><dt>A passing lot</dt><dd>Product specifications are justified using relevant development, clinical, manufacturing-consistency and stability data. They are not generic similarity limits between curves (<a href="https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf" target="_blank" rel="noopener">ICH Q6B</a>).</dd></div>
+            <div><dt>A supported comparison</dt><dd>Analytical-method bridging and manufacturing-change comparability are different exercises. Routine specifications alone are generally insufficient for assessing manufacturing-change impact (<a href="https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">ICH Q14</a>, <a href="https://database.ich.org/sites/default/files/Q5E%20Guideline.pdf" target="_blank" rel="noopener">ICH Q5E</a>).</dd></div>
+          </dl>
+          <h4>What makes the comparison defensible</h4>
+          <ul class="guidance-points">
+            <li><strong>Biological relevance:</strong> Binding may be an acceptable potency procedure, but the rationale is product-specific; a binding midpoint does not automatically cover multiple functional activities. A more complex cell assay is not automatically the better QC method (<a href="https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf" target="_blank" rel="noopener">Q6B</a>, <a href="https://database.ich.org/sites/default/files/Q5E%20Guideline.pdf" target="_blank" rel="noopener">Q5E</a>, <a href="https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031" target="_blank" rel="noopener">White et al., 2019</a>).</li>
+            <li><strong>Reference continuity:</strong> Characterize the primary reference, calibrate working references against it, and document material stability. A reference is part of the measurement system, not a timeless denominator (<a href="https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf" target="_blank" rel="noopener">Q6B</a>, <a href="https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031" target="_blank" rel="noopener">White et al.</a>).</li>
+            <li><strong>Supported curve similarity:</strong> A single relative potency requires a suitable response-curve relationship; midpoint ratios alone are insufficient when slope or asymptote differences violate suitability criteria (<a href="https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031" target="_blank" rel="noopener">White et al.</a>). This model reports B/A EC50, not reference-normalized percent relative potency; under a supported horizontal-shift model, their concentration-ratio directions are reciprocal.</li>
+            <li><strong>Precision of the reportable result:</strong> Evaluate accuracy, repeatability and intermediate precision across the intended range and relevant analysts, days and preparations. The number of independent runs and possible correlations among them matter; extra wells cannot estimate missing run-to-run variability (<a href="https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">Q2(R2)</a>, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11788244/" target="_blank" rel="noopener">Li et al., online 2024; issue 2025</a>).</li>
+            <li><strong>Lifecycle control:</strong> Monitor performance and assess changes to reagents, cell banks, passage range, reference materials and analysis procedures. Q14 links the extent of bridging or revalidation to risk; its biological-potency example considers cell density, viability and passage-dependent performance (<a href="https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">Q14</a>).</li>
+          </ul>
+          <div class="guidance-caution"><h4>No universal 0.8–1.25 rule</h4><p>The model's margins are illustrative, not regulatory acceptance limits. Q2(R2)'s biological-assay examples and Q14's case-study criteria are not universal templates; Q14 also does not make formal documentation or submission of an analytical target profile mandatory in every case (<a href="https://database.ich.org/sites/default/files/ICH_Q2(R2)_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">Q2(R2)</a>, <a href="https://database.ich.org/sites/default/files/ICH_Q14_Guideline_2023_1130_ErrorCorrection_2025.pdf" target="_blank" rel="noopener">Q14</a>).</p></div>
+          <p class="guidance-action"><a href="#bridge">Explore a crossed bridge</a> to separate within-method contrasts from their method dependence. The calculation remains conditional on independently established suitability and justified margins.</p>
+        </section>
+        <section id="guidance-early" tabindex="-1">
+          <p class="eyebrow">EARLY DISCOVERY</p>
+          <h3>A useful comparison is not yet a transferable one.</h3>
+          <p>Provisional candidate ranking and hypothesis generation are different intended uses from batch release. They still require biological relevance, appropriate controls and enough reproducibility to resolve the differences driving the next decision (<a href="https://www.ncbi.nlm.nih.gov/books/NBK83783/" target="_blank" rel="noopener">Assay Guidance Manual: HTS Assay Validation</a>).</p>
+          <ul class="guidance-points">
+            <li><strong>A good plate is not reproducible potency:</strong> Z′ assesses control-signal separation; potency reproducibility and agreement across runs are separate questions (<a href="https://www.ncbi.nlm.nih.gov/books/NBK83783/" target="_blank" rel="noopener">Assay Guidance Manual</a>).</li>
+            <li><strong>Wells are not independent runs:</strong> Across-run comparisons need both within-run and between-run variability. More wells in one preparation do not establish robustness across days, reagent preparations or cell states (<a href="https://www.ncbi.nlm.nih.gov/books/NBK83783/" target="_blank" rel="noopener">Assay Guidance Manual</a>, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11788244/" target="_blank" rel="noopener">Li et al.</a>).</li>
+            <li><strong>A benchmark is not a universal correction:</strong> In this model, a common method multiplier cancels in a within-method ratio, but differential responses to that method do not. A stable benchmark does not prove that every test antibody is equally insensitive to the changed context.</li>
+            <li><strong>Different curves should not be forced into one rank:</strong> Unsupported similarity of slopes or asymptotes prevents interpreting a midpoint ratio as a single relative potency (<a href="https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031" target="_blank" rel="noopener">White et al.</a>). In the cell model, normalization can also conceal loss of absolute binding signal.</li>
+            <li><strong>Historical pooling needs a bridge:</strong> The Assay Guidance Manual calls for assay-comparison work when changed methods will be combined with earlier results, and advises against pooling when the assays are not equivalent for that purpose (<a href="https://www.ncbi.nlm.nih.gov/books/NBK83783/" target="_blank" rel="noopener">Assay Guidance Manual</a>).</li>
+            <li><strong>Thresholds belong to their intended use:</strong> Screening MSR and agreement-limit recommendations are not generic biological-product specifications. Neither should a QC-looking interval be imported into discovery without a decision-specific justification (<a href="https://www.ncbi.nlm.nih.gov/books/NBK83783/" target="_blank" rel="noopener">Assay Guidance Manual</a>, <a href="https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf" target="_blank" rel="noopener">Q6B</a>).</li>
+          </ul>
+          <div class="guidance-caution"><h4>Preserve the comparison before optimizing its precision.</h4><p>As a practical recommendation, retain full curves and assay metadata, compare overlapping materials under both versions, and decide which differences would change the next experimental decision before pooling results. For Raji versus an unstable engineered population, first ask whether the conclusion survives changes in positive fraction, receptor density, ligand availability and endpoint definition.</p><p>An old retained vial represents its current condition, not automatically its condition years ago; reference and sample stability need consideration alongside lot and method (<a href="https://database.ich.org/sites/default/files/Q6B%20Guideline.pdf" target="_blank" rel="noopener">Q6B</a>, <a href="https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031" target="_blank" rel="noopener">White et al.</a>).</p></div>
+          <p class="guidance-action"><a href="#walkthrough">Follow the Raji-versus-engineered-cell walkthrough</a> to vary one assumption at a time. These are controlled thought experiments, not a measured passage series.</p>
+        </section>
+        <section id="guidance-figure" tabindex="-1">
+          <p class="eyebrow">PUBLICATION FIGURE · FIXED REFERENCE RUNS</p>
+          <h3>More data can strengthen the wrong comparison.</h3>
+          <p>In the synthetic masked-lot scenario, a true within-method EC50 ratio of 2.0 is multiplied by a method factor of 0.5, centering the historical ratio at 1.0 on the log scale. More independent contrasts increase precision around the confounded quantity, not identification of the lot effect (<a href="https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/docs/SIMULATION-DESIGN.md" target="_blank" rel="noopener">v0.5.0 simulation design</a>).</p>
+          <figure class="guidance-figure">
+            <a href="resources/misleading-historical-equivalence.svg" target="_blank" rel="noopener" aria-label="Open full-size publication figure">
+              <img src="resources/misleading-historical-equivalence-preview.png" width="1440" height="1120" loading="lazy" alt="A twofold lot EC50 ratio multiplied by a method factor of 0.5 centers the historical ratio at one. Misleading equivalence declarations rise from 2.87% to 7.83% to 40.59% at 4, 8 and 16 independent run-level contrasts. Synthetic simulation, 100,000 experiments per condition.">
+            </a>
+            <figcaption>Open the image for a full-size view. The readable table below carries the exact rates and Monte Carlo intervals.</figcaption>
+          </figure>
+          <div class="guidance-results" role="region" aria-label="Publication figure numerical results" tabindex="0">
+            <table><caption>Historical lot-equivalence declarations in the masked-lot scenario</caption><thead><tr><th scope="col">Independent contrasts, n</th><th scope="col">Declarations / 100,000</th><th scope="col">Rate</th><th scope="col">95% MC interval</th></tr></thead><tbody>
+              <tr><th scope="row">4</th><td>2,869</td><td>2.869%</td><td>2.7673–2.9743%</td></tr>
+              <tr><th scope="row">8</th><td>7,830</td><td>7.830%</td><td>7.6651–7.9981%</td></tr>
+              <tr><th scope="row">16</th><td>40,589</td><td>40.589%</td><td>40.2850–40.8937%</td></tr>
+            </tbody></table>
+          </div>
+          <p class="small">Values are from the version-pinned <a href="https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/blocks-4/simulation-results.json" target="_blank" rel="noopener">4-run</a>, <a href="https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/simulation-results.json" target="_blank" rel="noopener">8-run</a> and <a href="https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/blocks-16/simulation-results.json" target="_blank" rel="noopener">16-run</a> outputs. Changing Simulation lab controls does not change this reference figure.</p>
+          <p>The experimental decision rule is a <strong>90% t confidence interval</strong> strictly inside illustrative margins of 0.8–1.25; the figure's separate <strong>95% Wilson Monte Carlo intervals</strong> quantify finite-simulation uncertainty in the declaration rates (<a href="https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/web/simulation-model.mjs" target="_blank" rel="noopener">simulation implementation</a>). This is a failure of attributing the historical contrast to the lot effect, not a failure of the interval calculation.</p>
+          <p class="guidance-caution">Synthetic demonstration only. No raw dose-response curves are fitted, and the figure does not estimate the failure rate of a real QC procedure.</p>
+          <div class="guidance-downloads" aria-label="Figure downloads">
+            <a class="button quiet" href="resources/misleading-historical-equivalence.png" download>600-dpi PNG</a>
+            <a class="button quiet" href="resources/misleading-historical-equivalence.svg" download>Editable SVG</a>
+            <a class="button quiet" href="resources/misleading-historical-equivalence-caption.md" download>Caption &amp; QC context</a>
+            <a class="button quiet" href="resources/misleading-historical-equivalence-data.csv" download>Exact data CSV</a>
+          </div>
+          <p class="guidance-action"><a href="#simulation">Run the simulation yourself</a> with another seed or number of independent blocks. More iterations reduce Monte Carlo error, not confounding or biological model error.</p>
+        </section>
+      </div>
+    </div>
+  </section>
 </main>
-<footer><span>Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07<br>Comparability Check · v0.5.0 · MIT</span><a href="https://github.com/dataRichinsightPoor/comparability-check" target="_blank" rel="noopener">Inspect code &amp; tests on GitHub</a><span>Software verification ≠ biological validation.</span></footer>
+<footer><span>Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07<br>Comparability Check · v0.6.0 · MIT</span><a href="https://github.com/dataRichinsightPoor/comparability-check" target="_blank" rel="noopener">Inspect code &amp; tests on GitHub</a><span>Software verification ≠ biological validation.</span></footer>
 </body>
 </html>

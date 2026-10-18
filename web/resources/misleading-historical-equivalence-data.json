@@ -1,0 +1,44 @@
+{
+  "source": "https://github.com/dataRichinsightPoor/comparability-check/tree/v0.5.0",
+  "rows": [
+    {
+      "blocks": 4,
+      "repeats": 100000,
+      "count": 2869,
+      "ratePercent": 2.869,
+      "loPercent": 2.7673318747364624,
+      "hiPercent": 2.9742890220818405,
+      "theta": 2,
+      "method": 0.5,
+      "baseSeed": 26007,
+      "scenarioSeed": 27016,
+      "source": "https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/blocks-4/simulation-results.json"
+    },
+    {
+      "blocks": 8,
+      "repeats": 100000,
+      "count": 7830,
+      "ratePercent": 7.829999999999999,
+      "loPercent": 7.665111546365047,
+      "hiPercent": 7.998128215550207,
+      "theta": 2,
+      "method": 0.5,
+      "baseSeed": 26007,
+      "scenarioSeed": 27016,
+      "source": "https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/simulation-results.json"
+    },
+    {
+      "blocks": 16,
+      "repeats": 100000,
+      "count": 40589,
+      "ratePercent": 40.589,
+      "loPercent": 40.28500845252962,
+      "hiPercent": 40.89371455907543,
+      "theta": 2,
+      "method": 0.5,
+      "baseSeed": 26007,
+      "scenarioSeed": 27016,
+      "source": "https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/blocks-16/simulation-results.json"
+    }
+  ]
+}

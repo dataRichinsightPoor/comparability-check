@@ -1,0 +1,4 @@
+blocks,repeats,count,ratePercent,loPercent,hiPercent,theta,method,baseSeed,scenarioSeed,source
+4,100000,2869,2.869,2.7673318747364624,2.9742890220818405,2,0.5,26007,27016,https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/blocks-4/simulation-results.json
+8,100000,7830,7.829999999999999,7.665111546365047,7.998128215550207,2,0.5,26007,27016,https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/simulation-results.json
+16,100000,40589,40.589,40.28500845252962,40.89371455907543,2,0.5,26007,27016,https://github.com/dataRichinsightPoor/comparability-check/blob/v0.5.0/results/blocks-16/simulation-results.json

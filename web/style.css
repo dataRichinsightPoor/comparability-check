@@ -17,6 +17,42 @@
  --text-xs:clamp(.75rem,.72rem + .12vw,.82rem);--text-sm:clamp(.875rem,.84rem + .15vw,.95rem);--text-base:clamp(1rem,.97rem + .15vw,1.06rem);--text-lg:clamp(1.125rem,1.05rem + .3vw,1.35rem);--text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
  --s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.25rem;--s6:1.5rem;--s8:2rem;--s10:2.5rem;--s12:3rem;--s16:4rem;
 }
+.tabs{flex-wrap:wrap}
+.guidance-intro{max-width:85ch;margin-bottom:var(--s8)}
+.guidance-intro h2{font:500 var(--text-xl)/1.25 var(--font-display)}
+.guidance-layout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:var(--s10)}
+.guidance-rail{position:sticky;top:var(--s6);align-self:start}
+.guidance-rail nav{display:flex;flex-direction:column;margin-bottom:var(--s5);border-left:2px solid var(--line)}
+.guidance-rail nav a{padding:var(--s3);font-size:var(--text-sm);font-weight:700;text-decoration:none}
+.guidance-rail nav a:hover{background:var(--soft)}
+.guidance-rail .button{width:100%;margin-top:var(--s3)}
+.guidance-body{min-width:0;max-width:1000px}
+.guidance-body>section{padding:var(--s6) 0 var(--s8);border-top:1px solid var(--line);scroll-margin-top:var(--s5)}
+.guidance-body>section>h3{font-size:var(--text-xl);font-family:var(--font-display);font-weight:500}
+.guidance-body h4{font-size:var(--text-lg);margin:var(--s6) 0 var(--s3);line-height:1.4}
+.guidance-body p,.guidance-body li,.guidance-body dd{max-width:83ch}
+.guidance-decisions{margin:var(--s5) 0}
+.guidance-decisions>div{display:grid;grid-template-columns:180px minmax(0,1fr);gap:var(--s5);padding:var(--s4) 0;border-bottom:1px solid var(--line)}
+.guidance-decisions dt{font-weight:700;color:var(--accent)}
+.guidance-decisions dd{margin:0;font-size:var(--text-sm)}
+.guidance-points{padding-left:var(--s5)}
+.guidance-points li{padding-left:var(--s1);margin-bottom:var(--s4)}
+.guidance-caution{background:var(--warm);padding:var(--s5);margin:var(--s6) 0}
+.guidance-caution h4{margin-top:0}
+.guidance-caution p:last-child{margin-bottom:0}
+.guidance-action{padding-top:var(--s4);border-top:1px solid var(--line)}
+.guidance-figure{margin:var(--s6) 0}
+.guidance-figure img{display:block;width:100%;height:auto;background:white;border:1px solid var(--line)}
+.guidance-figure figcaption{font-size:var(--text-sm);color:var(--muted);margin-top:var(--s3)}
+.guidance-results{overflow-x:auto;margin:var(--s5) 0}
+.guidance-results table{min-width:510px;font-variant-numeric:tabular-nums}
+.guidance-results caption{text-align:left;font-size:var(--text-sm);font-weight:700;padding-bottom:var(--s3)}
+.guidance-results th[scope=row]{font-weight:700;color:var(--ink)}
+.guidance-downloads{display:flex;flex-wrap:wrap;gap:var(--s3);margin:var(--s5) 0}
+.guidance :target{scroll-margin-top:var(--s5)}
+.guidance:focus,.guidance-body>section:focus{outline:none}
+@media(max-width:900px){.guidance-layout{grid-template-columns:1fr;gap:var(--s6)}.guidance-rail{position:static}.guidance-rail nav{flex-direction:row;flex-wrap:wrap;border-left:0;border-bottom:1px solid var(--line)}.guidance-rail .button{width:auto}.guidance-rail>p{max-width:75ch}}
+@media(max-width:600px){.guidance-decisions>div{grid-template-columns:1fr;gap:var(--s2)}.guidance-intro{margin-bottom:var(--s5)}.guidance-body>section>h3{font-size:var(--text-lg);font-family:var(--font-body);font-weight:700}.guidance-results::before{content:"Scroll table horizontally for all columns.";display:block;font-size:var(--text-xs);color:var(--muted);margin-bottom:var(--s3)}}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:var(--text-base);line-height:1.55}
 [hidden]{display:none!important}button,input,select,textarea{font:inherit;color:inherit}button,.button{min-height:44px;border:1px solid var(--accent);background:var(--accent);color:var(--surface);padding:var(--s2) var(--s4);border-radius:3px;cursor:pointer;font-size:var(--text-sm);font-weight:700;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 button:hover,.button:hover{filter:brightness(.94)}button.quiet,.button.quiet{background:transparent;color:var(--ink);border-color:var(--line)}button:disabled{opacity:.5;cursor:not-allowed}

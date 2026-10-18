@@ -8,6 +8,10 @@ An MIT-licensed, research-use model for comparing reported binding EC50 values w
 
 [Open the model](https://datarichinsightpoor.github.io/comparability-check/) · [Read the companion essay](docs/COMPANION-ARTICLE.md) · [Inspect the simulation findings](docs/SIMULATION-DESIGN.md)
 
+Version 0.6 adds a dedicated [QC & discovery guide](https://datarichinsightpoor.github.io/comparability-check/#guidance), including [late-stage QC](https://datarichinsightpoor.github.io/comparability-check/#guidance-qc), [early-discovery pitfalls](https://datarichinsightpoor.github.io/comparability-check/#guidance-early), and the [publication figure](https://datarichinsightpoor.github.io/comparability-check/#guidance-figure). The live app bundles the full essay, 600-dpi PNG, editable SVG, referenced caption and exact CSV data for download.
+
+The guidance separates result suitability, procedure validation, product specifications and study-specific comparability. It also distinguishes [development stage, purpose and GMP execution](https://datarichinsightpoor.github.io/comparability-check/#guidance-pharma), with pharmaceutical-industry examples, USP chapter scope and FDA guidance. The figure remains pinned to the original v0.5.0 synthetic runs; it is not recalculated from current Simulation lab controls. Numerical algorithms and their assumptions are unchanged in v0.6.
+
 This research-use tool begins with a claim audit, offers a guided cell-context walkthrough, and separates three inferential problems:
 
 - **Claim audit:** Specify the intended conclusion, endpoint identities, design and declared evidence. Receive an unresolved-evidence checklist and a next discriminating measurement. It never evaluates raw data or converts declarations into proof.

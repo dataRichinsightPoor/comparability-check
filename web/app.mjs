@@ -7,17 +7,41 @@ import {validateAudit,AUDIT_DEFAULTS} from "./audit-model.mjs";
 import {walkthroughSettings,applyWalkthrough,initializeWalkthrough,redrawWalkthrough} from "./walkthrough-ui.mjs";
 import {validateWalkthrough} from "./walkthrough-model.mjs";
 import {initializeSimulation} from "./simulation-ui.mjs";
+import {VIEWS,routeForHash} from "./navigation-model.mjs";
 const $=id=>document.getElementById(id);
 let view="audit", bridgeResult=null, historyResult=null;
 const f=x=>x===null?"Unavailable":(Math.abs(x)>=1000||Math.abs(x)<.01?x.toExponential(2):Number(x.toPrecision(3)).toString());
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function setView(v){
-  if(!["audit","walkthrough","history","context","bridge","simulation","methods"].includes(v))return;
+function setView(v,{updateHash=true}={}){
+  if(!VIEWS.includes(v))return;
   view=v;
   document.querySelectorAll(".view").forEach(e=>e.hidden=e.id!==v);
   document.querySelectorAll("[data-view]").forEach(e=>e.setAttribute("aria-pressed",String(e.dataset.view===v)));
+  if(updateHash){
+    // Shared-host previews can have opaque origins that disallow History API access.
+    try{history.replaceState(null,"",`#${v}`);}catch{/* View switching still works. */}
+  }
   redrawActive();
 }
+function followHash(){
+  const route=routeForHash(location.hash);
+  if(!route)return;
+  setView(route.view,{updateHash:false});
+  requestAnimationFrame(()=>{
+    const target=$(route.anchor);
+    target?.scrollIntoView({block:"start"});
+    if(target?.hasAttribute("tabindex"))target.focus({preventScroll:true});
+  });
+}
+window.addEventListener("hashchange",followHash);
+document.addEventListener("click",event=>{
+  if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
+  const link=event.target.closest('a[href^="#"]');
+  const route=link&&routeForHash(link.getAttribute("href"));
+  // Reveal the target before native anchor scrolling, including repeat clicks
+  // on the same hash in opaque-origin frames where replaceState is unavailable.
+  if(route)setView(route.view,{updateHash:false});
+});
 function redrawActive(){
   if(view==="history"&&historyResult)drawHistory(historyResult);
   if(view==="bridge"&&bridgeResult)drawBridge(bridgeResult);
@@ -115,7 +139,7 @@ $("import-settings").addEventListener("change",async e=>{
     if(typeof h.unit!=="string"||h.unit.length>24)throw new Error("Invalid unit label.");
     for(const k of ["lower","upper","interactionLower","interactionUpper"])
       if(typeof b[k]!=="number"||!Number.isFinite(b[k]))throw new Error("Settings must include four finite numerical margins.");
-    if(!["audit","walkthrough","history","context","bridge","simulation","methods"].includes(s.view))throw new Error("Unrecognized view.");
+    if(!VIEWS.includes(s.view))throw new Error("Unrecognized view.");
     const exponent=Number(h.log2Multiplier);
     if(!Number.isFinite(exponent)||exponent < -4||exponent>4)throw new Error("Method slider must be between −4 and 4 in log2 units.");
     historical(Number(h.earlier),Number(h.later),2**exponent);
@@ -147,3 +171,4 @@ initializeWalkthrough(download,setView,applyContext);
 initializeSimulation(download);
 document.querySelectorAll("button,input,select,textarea,a").forEach((e,i)=>{e.dataset.testid=e.id||e.dataset.view||`control-${i}`;});
 updateHistory();updateBridge();
+followHash();
