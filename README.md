@@ -1,15 +1,27 @@
 # Comparability Check
 
+Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07
+
 ## To Be or Not to Be Comparable
 
-A model in 99 Small Problems in Bioassay. Compare reported binding EC50 values without quietly turning a measurement difference into a lot effect.
+An MIT-licensed, research-use model for comparing reported binding EC50 values without quietly turning a measurement difference into a lot effect. This numbered installment uses only synthetic examples and public literature.
 
-This research-use tool begins with a claim audit, then separates three inferential problems:
+This research-use tool begins with a claim audit, offers a guided cell-context walkthrough, and separates three inferential problems:
 
 - **Claim audit:** Specify the intended conclusion, endpoint identities, design and declared evidence. Receive an unresolved-evidence checklist and a next discriminating measurement. It never evaluates raw data or converts declarations into proof.
+- **Guided walkthrough:** Eight controlled Raji-versus-engineered examples hold the antibody's one-site parameter fixed while separating positive-fraction loss, density loss, normalization, gating, ligand depletion, tracer concentration and a generic functional-response mapping. Each step provides matched-axis before/after plots, numerical outputs, an optional interpretation reveal, inference limits and a next measurement.
 - **Historical contrast:** Enter an earlier lot-A/method-P EC50 and a later lot-B/method-Q EC50. Explore different assumed method shifts that produce the same observed ratio. The lot effect remains unidentified; the slider is a sensitivity scenario, not an estimated correction.
 - **Cells and endpoints:** Keep a shared one-site antibody binding parameter fixed while changing positive-cell fraction, target density per positive cell, passage, cell load, tracer concentration, and signal population. Compare absolute and normalized binding, competitive tracer blockade, and an explicitly separate generic functional-response sandbox.
 - **Crossed bridge:** Enter complete, paired experimental blocks containing both lots under both methods. Estimate within-method geometric EC50 ratios, a ratio-of-ratios interaction, paired Student t confidence intervals, and endpoint-specific equivalence assessments under declared assumptions.
+- **Simulation lab:** Repeat six seeded endpoint experiments and a separate paired Raji/engineered-cell sensitivity ensemble, with 1,000 to 1,000,000 iterations per scenario in the browser. Export settings, assumptions, coverage, bias, equivalence rates, Monte Carlo uncertainty, and cell-context quantiles. An analytic unequal-slope example shows why identical EC50 values need not imply a common relative potency.
+
+## Start with the scientific argument
+
+Read [what is and is not comparable](docs/COMPARABILITY-PRINCIPLES.md), then follow the eight-step walkthrough in the browser. The relevant earlier installment is [Data-Rich, Insight-Poor CCI: The Assay Got Better Because the Cells Got Worse](https://www.linkedin.com/pulse/assay-got-better-because-cells-worse-ermelinda-damko-6kvme), a synthesis of mechanisms and simulations rather than a measured longitudinal Raji dataset.
+
+Version 0.5 adds large-iteration stress tests without treating simulation volume as biological evidence. See the [reference simulation report](results/SIMULATION-REPORT.md) and [machine-readable results](results/simulation-results.json). Each reference scenario uses 100,000 iterations, for 600,000 repeat endpoint experiments plus 100,000 paired cell-context draws; independent-seed and block-count checks are in `results/seed-check`, `results/blocks-4`, and `results/blocks-16`.
+
+The [simulation design and findings](docs/SIMULATION-DESIGN.md) specify the generative equations, random streams, interpretation and excluded mechanisms. A shared cooperative generator keeps the browser responsive without worker-origin privileges; the CLI consumes the same generator synchronously.
 
 All bundled numerical examples are synthetic. The rituximab–Raji illustration is motivated by a published cell-binding assay pairing, not by any measured lot discrepancy ([Xu et al., 2019](https://www.tandfonline.com/doi/full/10.1080/19420862.2019.1578147)).
 
@@ -19,7 +31,11 @@ Did the antibody change, did the cell substrate change, or did the readout chang
 
 Version 0.3 opens with “Which conclusion are you trying to establish?” rather than a calculator. The audit separates a potentially suitable design from an actual result; it does not approve affinity, genomic causation, functional prediction or equivalence based on selections. Numerical calculation remains in the appropriate model, and the generic functional layer remains distinct from rituximab biology.
 
-The cell simulator now audits its own negligible-depletion approximation against finite-supply calculations. Above a 10% diagnostic threshold, a warning recommends testing mass balance; the threshold is a heuristic, not assay qualification. Plots adapt to narrow screens without horizontal scrolling. Settings schema 3 includes the claim audit and retains imports from schemas 1 and 2.
+The cell simulator audits its own negligible-depletion approximation against finite-supply calculations. Above a 10% diagnostic threshold, a warning recommends testing mass balance; the threshold is a heuristic, not assay qualification. Plots adapt to narrow screens without horizontal scrolling.
+
+Version 0.4 adds the guided walkthrough without changing sandbox inputs during browsing. “Copy after-state to sandbox” explicitly transfers only that step's cell-context parameters. Settings schema 4 preserves the walkthrough position and imports schemas 1–3; answer reveals reset when a step is loaded. The complete walkthrough can be downloaded as a source-cited Markdown handout and is also included at [docs/GUIDED-WALKTHROUGH.md](docs/GUIDED-WALKTHROUGH.md).
+
+The lesson is a sequence of controlled paired thought experiments, not one continuous longitudinal dataset. Within each step, the changed factor is explicit and the charts share a concentration domain. The final functional reporter remains a conceptual extension, not a biological model of rituximab.
 
 Under its one-site, negligible-depletion assumptions, loss of positive cells or accessible sites can reduce the binding plateau without shifting normalized binding EC50. With finite ligand supply, target loss can instead shift the total-concentration EC50 left while the antibody parameter is unchanged; the exact equilibrium relation is EC50 = K + RT/2 ([Hulme and Trevethick, 2010](https://pmc.ncbi.nlm.nih.gov/articles/PMC3000649/)).
 
@@ -56,6 +72,12 @@ node cli.mjs bridge examples/common-shift.csv 0.9 1.1 0.85 1.18
 # Cell-context endpoints, not simulated data fitting:
 node cli.mjs context
 node cli.mjs context examples/cell-context.json
+
+# Iterations per scenario, unsigned 32-bit seed, blocks, output directory:
+node simulate.mjs 100000 26007 8 results
+node simulate.mjs 100000 71260 8 results/seed-check
+node simulate.mjs 100000 26007 4 results/blocks-4
+node simulate.mjs 100000 26007 16 results/blocks-16
 ```
 
 CLI output is always exploratory. The browser additionally lets the user declare that assay suitability, independence, and justified prespecified margins have been established outside the software; this changes conditional reporting language, not the numerical results.

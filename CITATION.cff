@@ -1,9 +1,9 @@
 cff-version: 1.2.0
 message: "Please cite this software when using the model."
-title: "Comparability Check: To Be or Not to Be Comparable"
+title: "Data-Rich, Insight-Poor CCLX: To Be or Not to Be Comparable (99 Small Problems No. 07)"
 authors:
   - name: "Data-Rich, Insight-Poor"
-version: 0.3.0
+version: 0.5.0
 date-released: 2026-10-17
 license: MIT
 repository-code: "https://github.com/dataRichinsightPoor/comparability-check"

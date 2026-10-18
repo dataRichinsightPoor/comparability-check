@@ -1,6 +1,6 @@
 # To Be or Not to Be Comparable
 
-99 Small Problems in Bioassay
+Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07
 
 Did the antibody change, did the cells change, or did the readout change?
 
@@ -9,6 +9,8 @@ An older report gives a binding EC50 of 4 nM. A newer report gives 1 nM for anot
 Now change the comparison. The earlier assay used a cell line expressing its target endogenously. The later assay used an engineered line whose surface expression declined with passage. One report measured antibody binding; another measured something called blocking.
 
 The numerical comparison remains possible. The biological comparison has become three different questions.
+
+This installment extends [Data-Rich, Insight-Poor CCI: The Assay Got Better Because the Cells Got Worse](https://www.linkedin.com/pulse/assay-got-better-because-cells-worse-ermelinda-damko-6kvme), which assembled mechanisms and simulations explaining why expression loss can improve an apparent blocking midpoint without improving the molecule. Here the question becomes operational: what comparison survives those possibilities, and what experiment could distinguish them?
 
 This model uses rituximab–Raji as a recognizable binding context, with an explicitly hypothetical engineered CD20-expressing comparator; published comparability work has used rituximab binding to Raji cells ([Xu and colleagues, 2019](https://www.tandfonline.com/doi/full/10.1080/19420862.2019.1578147)). All example values and expression trajectories are synthetic, not measurements of a commercial lot or a real engineered line.
 
@@ -35,6 +37,14 @@ The historical ratio then satisfies:
 One possible explanation is a lot ratio of 0.25 with no method effect. Another is no lot difference with a method multiplier of 0.25. Even a lot ratio of 2 combined with a method multiplier of 0.125 produces the same historical observation.
 
 These are alternative factorizations, not competing findings about rituximab. They show why the original observations cannot determine even the direction of the lot-associated difference without additional evidence.
+
+## We can match midpoints without matching curves
+
+A ratio of fitted midpoints is not automatically a relative potency. That interpretation requires sufficiently similar response curves, ideally differing only by a horizontal displacement; relevant slope and asymptote similarity must be supported for the intended use ([White et al., 2019](https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031)).
+
+Consider normalized curves with the same EC50 of 1 but Hill slopes of 1 and 2. At 50% response their dose ratio is 1; at 20% it is 2, and at 80% it is 0.5. These are exact values from the model's analytic counterexample. The midpoint agrees while the single-relative-potency interpretation fails.
+
+The new simulation lab repeats six endpoint experiments and a separate paired-cell sensitivity ensemble. Repetition can measure how often a procedure gives the right conditional answer under its assumptions; it cannot turn confounded historical observations into an identified lot effect or establish that the chosen mechanisms describe an actual antibody lot.
 
 ## We can observe expression loss without having diagnosed integration failure
 

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="What can binding EC50 values establish? Explore historical confounding and paired crossed-method comparisons.">
-  <title>Comparability Check | 99 Small Problems in Bioassay</title>
+  <meta name="description" content="Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07. To Be or Not to Be Comparable: antibody lots, cell-expression drift, binding and blocking.">
+  <title>To Be or Not to Be Comparable | Data-Rich, Insight-Poor CCLX · No. 07</title>
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=zodiak@400,500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -13,9 +13,9 @@
 <body>
 <a class="skip" href="#main">Skip to model</a>
 <header class="masthead">
-  <span class="brand">Data-Rich, Insight-Poor</span>
-  <span class="series">99 SMALL PROBLEMS IN BIOASSAY</span>
-  <span class="version">v0.3.0 · Private review</span>
+  <span class="brand">Data-Rich, Insight-Poor CCLX</span>
+  <span class="series">99 Small Problems · No. 07</span>
+  <span class="version">v0.5.0 · MIT · Research use</span>
 </header>
 <main id="main">
   <section class="intro">
@@ -30,9 +30,11 @@
   <p id="file-status" role="status" class="small"></p>
   <nav class="tabs" aria-label="Model views">
     <button data-view="audit" aria-pressed="true">Claim audit</button>
+    <button data-view="walkthrough" aria-pressed="false">Guided walkthrough</button>
     <button data-view="history" aria-pressed="false">Historical contrast</button>
     <button data-view="context" aria-pressed="false">Cells &amp; endpoints</button>
     <button data-view="bridge" aria-pressed="false">Crossed bridge</button>
+    <button data-view="simulation" aria-pressed="false">Simulation lab</button>
     <button data-view="methods" aria-pressed="false">Methods &amp; limits</button>
   </nav>
 
@@ -66,6 +68,35 @@
         <p id="audit-boundary" class="small"></p>
         <div class="evidence-key"><section><h3>Observed</h3><p>Measured curves, cell phenotype and experimental records.</p></section><section><h3>Assumed</h3><p>Chosen kinetics, stoichiometry, stability and response models.</p></section><section><h3>Unresolved</h3><p>A causal explanation not separated by the experiment.</p></section></div>
       </div>
+    </div>
+  </section>
+
+  <section id="walkthrough" class="view" hidden>
+    <div class="walk-intro">
+      <p class="eyebrow">RAJI VERSUS ENGINEERED CELLS</p><h2>Same antibody. Different reasons for a different curve.</h2>
+      <p>Eight controlled thought experiments use the same one-site K = 1 nM throughout. Raji is held stable by assumption; all values are synthetic, and the engineered population is not a real cell-line dataset.</p>
+      <p class="small">Each step states what changes and what stays fixed. Paired plots share concentration axes; later steps explicitly reset conditions when needed. This one-site equilibrium limit does not simulate avidity, trafficking or measurement noise. Browsing the walkthrough does not change your sandbox inputs.</p>
+    </div>
+    <div class="walk-layout">
+      <aside class="walk-outline"><nav id="walk-step-list" aria-label="Walkthrough steps"></nav><button id="walk-restart" class="quiet">Restart walkthrough</button></aside>
+      <article class="walk-body">
+        <div class="walk-mobile-select"><label for="walk-step-select">Choose a step</label><select id="walk-step-select"></select></div>
+        <div class="walk-head" id="walk-head"><div><p id="walk-progress" class="eyebrow"></p><h2 id="walk-title" tabindex="-1"></h2></div><div class="toolbar"><button id="walk-prev" class="quiet">Previous</button><button id="walk-next">Next</button></div></div>
+        <div class="walk-conditions"><section><h3>What changes</h3><p id="walk-changed"></p></section><section><h3>What stays fixed</h3><p id="walk-fixed"></p></section></div>
+        <p id="walk-boundary" class="next" hidden></p>
+        <div class="legend"><span><i class="swatch raji"></i>Raji reference</span><span><i class="swatch current"></i>Engineered population</span><span>Identical curves overlap.</span></div>
+        <div class="walk-panels">
+          <section class="walk-panel"><p class="eyebrow">BEFORE</p><h3 id="walk-before-title"></h3><div id="walk-before-chart" class="chart"></div><div id="walk-before-metrics"></div></section>
+          <section class="walk-panel"><p class="eyebrow">AFTER</p><h3 id="walk-after-title"></h3><div id="walk-after-chart" class="chart"></div><div id="walk-after-metrics"></div></section>
+        </div>
+        <p class="small">These are deterministic model outputs, not fitted experimental estimates. Absolute plateau values remain visible even when the plot is normalized.</p>
+        <section class="walk-reflection"><p class="eyebrow">PAUSE AND INTERPRET</p><h3 id="walk-question"></h3><button id="walk-reveal" class="quiet" aria-expanded="false" aria-controls="walk-answer">Reveal the interpretation</button><p id="walk-answer" hidden></p></section>
+        <div class="claim-pair"><section><h3>What this establishes in the model</h3><p id="walk-establishes"></p></section><section><h3>What it does not establish</h3><p id="walk-cannot"></p></section></div>
+        <section class="next-measurement"><p class="eyebrow">NEXT DISCRIMINATING MEASUREMENT</p><p id="walk-next-measurement"></p></section>
+        <details class="evidence"><summary>Inspect the relationship</summary><p id="walk-equation"></p></details>
+        <section id="walk-summary" class="walk-reflection" hidden><h3>The conclusion to carry back to the bench</h3><p>A changed curve can reflect the antibody, the cell substrate, the measurement definition or the functional readout. A matching curve can also conceal a changed substrate.</p><p>Preserve absolute signal, population composition, assay conditions and endpoint identity. Then design the comparison that separates the explanation you want to test; this walkthrough does not establish that explanation for your experiment.</p></section>
+        <div class="toolbar walk-actions"><button id="walk-next-bottom">Continue to next step</button><button id="walk-copy" class="quiet">Copy after-state to sandbox</button><button id="walk-download" class="quiet">Download walkthrough</button></div>
+      </article>
     </div>
   </section>
 
@@ -215,7 +246,32 @@
       <section><h3>The generic functional layer is a separate thought experiment</h3><p>The optional reporter maps occupied tracer sites per positive cell x to F(x) = xʰ/(S50ʰ + xʰ). Its normalized inhibition is 1 − F(x(C))/F(x(0)). With h = 1 and no depletion, its IC50 = (K + tracer) × (1 + x(0)/S50), derived from that assumed transfer function.</p><p>This shows how response reserve can separate a functional midpoint from an occupancy midpoint. It is not a CD20 signaling mechanism, a prediction of rituximab function, or an inference from cell binding alone. Full-length antibody avidity, receptor organization, trafficking, nonequilibrium kinetics, and heterogeneous positive-cell densities are outside this release.</p></section>
     </div>
   </section>
+  <section id="simulation" class="view" hidden>
+    <div class="panel simulation-panel">
+      <p class="eyebrow">REPEAT THE EXPERIMENT. NOT THE ASSUMPTION.</p>
+      <h2>Precision cannot repair the wrong comparison.</h2>
+      <p>Six seeded endpoint experiments test historical confounding, common shifts, interactions, comparator drift, equivalence boundaries, and low precision. A separate paired-cell sensitivity ensemble varies expression loss while holding the antibody parameter unchanged. These are synthetic scenarios, not measurements of rituximab lots.</p>
+      <div class="sim-controls">
+        <label>Iterations per scenario<select id="sim-iterations"><option value="1000">1,000 · quick</option><option value="10000" selected>10,000 · standard</option><option value="100000">100,000 · stress test</option><option value="1000000">1,000,000 · extended</option></select></label>
+        <label>Independent blocks<input id="sim-blocks" type="number" min="3" max="100" step="1" value="8"></label>
+        <label>Random seed<input id="sim-seed" type="number" min="0" max="4294967295" step="1" value="26007"></label>
+      </div>
+      <div class="actions"><button id="sim-run">Run simulations</button><button id="sim-cancel" disabled>Cancel</button><button id="sim-json" disabled>Download JSON</button><button id="sim-report" disabled>Download report</button></div>
+      <p id="sim-status" role="status" aria-live="polite">Ready. No simulation has run yet. Simulation settings and outputs are exported separately from the main model settings.</p>
+      <div id="sim-result" hidden>
+        <h3>How often would a 90% CI fall inside 0.8–1.25?</h3>
+        <p>Margins are illustrative, not qualified acceptance limits. Historical declarations are unjustified because lot and method are confounded. P, Q, and interaction refer to the paired bridge. A high declaration rate can mean high power or a confidently wrong historical comparison, depending on the scenario. MC intervals quantify simulation error only.</p>
+        <p class="sim-scroll-hint small">On narrow screens, scroll each table horizontally to compare all columns.</p>
+        <div class="sim-scroll" tabindex="0" role="region" aria-label="Scrollable equivalence simulation results"><table><thead><tr><th>Scenario</th><th>Historical</th><th>Within P</th><th>Within Q</th><th>Interaction</th></tr></thead><tbody id="sim-table"></tbody></table></div>
+        <h3>Raji held fixed; engineered expression declines</h3>
+        <p>Each draw starts with matched expression. Positive fraction and sites per positive cell then decline independently in the engineered after-state. Ratios are after/reference. These quantiles describe chosen input ranges, not biological confidence intervals. Competition and reporter use negligible depletion; finite-supply binding is a separate regime. Download the report for all ranges and assumptions.</p>
+        <div class="sim-scroll" tabindex="0" role="region" aria-label="Scrollable cell-context simulation results"><table><thead><tr><th>Endpoint ratio</th><th>5th percentile</th><th>Median</th><th>95th percentile</th></tr></thead><tbody id="sim-cells"></tbody></table></div>
+      </div>
+      <div class="sim-counterexample"><h3>Same midpoint. No single relative potency.</h3><p>For normalized curves with EC50 = 1 and slopes 1 versus 2, the B/A dose ratio depends on the response level:</p><p id="sim-shape" class="formula"></p><p>Curve similarity must support the relative-potency interpretation; agreement at 50% alone does not establish it (<a href="https://www.tandfonline.com/doi/full/10.2144/btn-2019-0031" target="_blank" rel="noopener">White et al., 2019</a>). This is an analytic counterexample, not a curve-fitting module.</p></div>
+      <p>Read the predecessor: <a href="https://www.linkedin.com/pulse/assay-got-better-because-cells-worse-ermelinda-damko-6kvme" target="_blank" rel="noopener">Data-Rich, Insight-Poor CCI: The Assay Got Better Because the Cells Got Worse</a>. Its synthesis and simulations motivate the question, not a validated longitudinal Raji dataset. The <a href="https://github.com/dataRichinsightPoor/comparability-check/blob/main/docs/COMPARABILITY-PRINCIPLES.md" target="_blank" rel="noopener">literature-backed comparison guide</a> separates supported conclusions from unsupported leaps.</p>
+    </div>
+  </section>
 </main>
-<footer><span>Comparability Check · v0.3.0 · MIT</span><a href="https://github.com/dataRichinsightPoor/comparability-check" target="_blank" rel="noopener">Inspect code &amp; tests on GitHub</a><span>Software verification ≠ biological validation.</span></footer>
+<footer><span>Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07<br>Comparability Check · v0.5.0 · MIT</span><a href="https://github.com/dataRichinsightPoor/comparability-check" target="_blank" rel="noopener">Inspect code &amp; tests on GitHub</a><span>Software verification ≠ biological validation.</span></footer>
 </body>
 </html>

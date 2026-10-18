@@ -16,3 +16,4 @@ jobs:
       - run: node cli.mjs history 4 1 0.125
       - run: node cli.mjs bridge examples/common-shift.csv
       - run: node cli.mjs context examples/cell-context.json
+      - run: node simulate.mjs 1000 26007 8 /tmp/comparability-simulations

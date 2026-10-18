@@ -1,5 +1,7 @@
 # Model and inference boundaries
 
+Version 0.5 additionally provides [the explicit simulation data-generating model](SIMULATION-DESIGN.md), [literature-backed comparison principles](COMPARABILITY-PRINCIPLES.md), and [the guided cell-context walkthrough](GUIDED-WALKTHROUGH.md). These extensions preserve the boundaries below rather than turning the app into a calibrated biological simulator.
+
 Comparability Check is a deliberately bounded model. The historical mode illustrates structural non-identifiability; the cell-context mode exposes distinct biological and readout explanations; the bridge mode estimates like-endpoint contrasts from complete paired blocks.
 
 ## Claim audit

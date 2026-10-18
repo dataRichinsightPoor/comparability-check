@@ -1,0 +1,1002 @@
+{
+  "version": "0.5.0",
+  "publication": "Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07",
+  "options": {
+    "iterations": 100000,
+    "seed": 26007,
+    "blocks": 16
+  },
+  "totalRepeatExperiments": 600000,
+  "totalCellScenarios": 100000,
+  "assumptions": "Six separately seeded scenario streams. Normal log-endpoint errors; 8 blocks by default; complete paired bridges; shared block SD .15, method-within-block SD .10, differential lot SD .08, endpoint residual SD per scenario. Historical eras have independent run SD .25. All uncertainty is at endpoint/block level, not a raw-curve fit. Illustrative margins 0.8–1.25; 90% CI inclusion implements TOST. Per-contrast 95% coverage is not simultaneous coverage.",
+  "scenarios": [
+    {
+      "id": "shared",
+      "name": "Shared method shift",
+      "theta": 1,
+      "method": 0.25,
+      "interaction": 1,
+      "reference": 1,
+      "sigma": 0.12,
+      "lesson": "A fourfold common method shift cancels in paired lot contrasts, not in an unbridged historical contrast.",
+      "contrasts": {
+        "historical": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 0.25,
+          "geometricMeanEstimate": 0.25001667371116193,
+          "logBias": -1.3862276684992452,
+          "logRMSE": 1.3896629464921115,
+          "coverage95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "equivalence90": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "containsOne95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Unjustified historical lot-equivalence declaration"
+        },
+        "P": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 0.9997926276803855,
+          "logBias": -0.00020739382422707998,
+          "logRMSE": 0.04702971025034635,
+          "coverage95": {
+            "count": 94948,
+            "rate": 0.94948,
+            "mcSE": 0.0006925873923195542,
+            "mc95Wilson": [
+              0.9481052039972618,
+              0.9508202641510505
+            ]
+          },
+          "equivalence90": {
+            "count": 99573,
+            "rate": 0.99573,
+            "mcSE": 0.00020619813529709711,
+            "mc95Wilson": [
+              0.9953063759229822,
+              0.9961155390124162
+            ]
+          },
+          "containsOne95": {
+            "count": 94948,
+            "rate": 0.94948,
+            "mcSE": 0.0006925873923195542,
+            "mc95Wilson": [
+              0.9481052039972618,
+              0.9508202641510505
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        },
+        "Q": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 0.9998972078547301,
+          "logBias": -0.00010279742874449704,
+          "logRMSE": 0.047060564724310625,
+          "coverage95": {
+            "count": 95019,
+            "rate": 0.95019,
+            "mcSE": 0.0006879604923249592,
+            "mc95Wilson": [
+              0.9488242440192071,
+              0.9515211695824856
+            ]
+          },
+          "equivalence90": {
+            "count": 99636,
+            "rate": 0.99636,
+            "mcSE": 0.00019044028985485127,
+            "mc95Wilson": [
+              0.9959671976500343,
+              0.9967146688848424
+            ]
+          },
+          "containsOne95": {
+            "count": 95019,
+            "rate": 0.95019,
+            "mcSE": 0.0006879604923249592,
+            "mc95Wilson": [
+              0.9488242440192071,
+              0.9515211695824856
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        },
+        "interaction": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 1.0001046018658764,
+          "logBias": 0.00010459639548258009,
+          "logRMSE": 0.06002733038671761,
+          "coverage95": {
+            "count": 94925,
+            "rate": 0.94925,
+            "mcSE": 0.0006940780755793974,
+            "mc95Wilson": [
+              0.9478722915508002,
+              0.9505931942675441
+            ]
+          },
+          "equivalence90": {
+            "count": 94241,
+            "rate": 0.94241,
+            "mcSE": 0.0007367047705831695,
+            "mc95Wilson": [
+              0.9409490185631315,
+              0.9438369927465928
+            ]
+          },
+          "containsOne95": {
+            "count": 94925,
+            "rate": 0.94925,
+            "mcSE": 0.0006940780755793974,
+            "mc95Wilson": [
+              0.9478722915508002,
+              0.9505931942675441
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        }
+      }
+    },
+    {
+      "id": "masked",
+      "name": "A real lot shift hidden by method",
+      "theta": 2,
+      "method": 0.5,
+      "interaction": 1,
+      "reference": 1,
+      "sigma": 0.12,
+      "lesson": "A twofold lot effect and a compensating method shift produce matching historical midpoints.",
+      "contrasts": {
+        "historical": {
+          "targetRatio": 2,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 0.9998388817464863,
+          "logBias": -0.6933083117943992,
+          "logRMSE": 0.7002195089454918,
+          "coverage95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "equivalence90": {
+            "count": 40589,
+            "rate": 0.40589,
+            "mcSE": 0.0015528789646975065,
+            "mc95Wilson": [
+              0.4028500845252962,
+              0.4089371455907543
+            ]
+          },
+          "containsOne95": {
+            "count": 94950,
+            "rate": 0.9495,
+            "mcSE": 0.0006924575799281859,
+            "mc95Wilson": [
+              0.9481254576213686,
+              0.9508400089904193
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "Unjustified historical lot-equivalence declaration"
+        },
+        "P": {
+          "targetRatio": 2,
+          "expectedObservedRatio": 2,
+          "geometricMeanEstimate": 1.9999036785741666,
+          "logBias": -0.00004816187268108507,
+          "logRMSE": 0.04685273519239881,
+          "coverage95": {
+            "count": 95014,
+            "rate": 0.95014,
+            "mcSE": 0.0006882875881490237,
+            "mc95Wilson": [
+              0.9487736049334544,
+              0.9514718125095493
+            ]
+          },
+          "equivalence90": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "containsOne95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "False-equivalence rate for this contrast"
+        },
+        "Q": {
+          "targetRatio": 2,
+          "expectedObservedRatio": 2,
+          "geometricMeanEstimate": 2.000159223075203,
+          "logBias": 0.00007960836877141109,
+          "logRMSE": 0.04704965165217505,
+          "coverage95": {
+            "count": 94944,
+            "rate": 0.94944,
+            "mcSE": 0.0006928469268171726,
+            "mc95Wilson": [
+              0.9480646969259509,
+              0.9507807742954105
+            ]
+          },
+          "equivalence90": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "containsOne95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "False-equivalence rate for this contrast"
+        },
+        "interaction": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 1.0001277784044085,
+          "logBias": 0.00012777024144356572,
+          "logRMSE": 0.060129100997227417,
+          "coverage95": {
+            "count": 94964,
+            "rate": 0.94964,
+            "mcSE": 0.0006915480489452628,
+            "mc95Wilson": [
+              0.9482672346443046,
+              0.9509782212118119
+            ]
+          },
+          "equivalence90": {
+            "count": 94183,
+            "rate": 0.94183,
+            "mcSE": 0.000740177351045005,
+            "mc95Wilson": [
+              0.9403622355707864,
+              0.9432638202981485
+            ]
+          },
+          "containsOne95": {
+            "count": 94964,
+            "rate": 0.94964,
+            "mcSE": 0.0006915480489452628,
+            "mc95Wilson": [
+              0.9482672346443046,
+              0.9509782212118119
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        }
+      }
+    },
+    {
+      "id": "interaction",
+      "name": "Lot-by-method interaction",
+      "theta": 1,
+      "method": 0.25,
+      "interaction": 1.5,
+      "reference": 1,
+      "sigma": 0.12,
+      "lesson": "A contrast established under P does not transport to Q; the ratio of ratios isolates the interaction.",
+      "contrasts": {
+        "historical": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 0.375,
+          "geometricMeanEstimate": 0.37525608883400097,
+          "logBias": -0.98014658252692,
+          "logRMSE": 0.9850544759677898,
+          "coverage95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "equivalence90": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "containsOne95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Unjustified historical lot-equivalence declaration"
+        },
+        "P": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 1.000185931667092,
+          "logBias": 0.0001859143839419887,
+          "logRMSE": 0.04696044387969442,
+          "coverage95": {
+            "count": 94925,
+            "rate": 0.94925,
+            "mcSE": 0.0006940780755793974,
+            "mc95Wilson": [
+              0.9478722915508002,
+              0.9505931942675441
+            ]
+          },
+          "equivalence90": {
+            "count": 99595,
+            "rate": 0.99595,
+            "mcSE": 0.00020083818113097912,
+            "mc95Wilson": [
+              0.9955368602262576,
+              0.9963250378073712
+            ]
+          },
+          "containsOne95": {
+            "count": 94925,
+            "rate": 0.94925,
+            "mcSE": 0.0006940780755793974,
+            "mc95Wilson": [
+              0.9478722915508002,
+              0.9505931942675441
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        },
+        "Q": {
+          "targetRatio": 1.5,
+          "expectedObservedRatio": 1.5,
+          "geometricMeanEstimate": 1.4999984906244435,
+          "logBias": -0.0000010062508773445167,
+          "logRMSE": 0.046961432474377646,
+          "coverage95": {
+            "count": 95081,
+            "rate": 0.95081,
+            "mcSE": 0.0006838884697083288,
+            "mc95Wilson": [
+              0.9494522000997841,
+              0.9521331658696489
+            ]
+          },
+          "equivalence90": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "containsOne95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "False-equivalence rate for this contrast"
+        },
+        "interaction": {
+          "targetRatio": 1.5,
+          "expectedObservedRatio": 1.5,
+          "geometricMeanEstimate": 1.499719645250633,
+          "logBias": -0.00018692063481812182,
+          "logRMSE": 0.06025374595109278,
+          "coverage95": {
+            "count": 94975,
+            "rate": 0.94975,
+            "mcSE": 0.0006908323783668511,
+            "mc95Wilson": [
+              0.9483786329125808,
+              0.9510868144926506
+            ]
+          },
+          "equivalence90": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "containsOne95": {
+            "count": 1,
+            "rate": 0.00001,
+            "mcSE": 0.000009999949999874999,
+            "mc95Wilson": [
+              0.0000017652477303783126,
+              0.00005664709659040966
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "False-equivalence rate for this contrast"
+        }
+      }
+    },
+    {
+      "id": "reference",
+      "name": "Comparator-specific drift",
+      "theta": 1,
+      "method": 1,
+      "interaction": 1,
+      "reference": 0.5,
+      "sigma": 0.12,
+      "lesson": "A shifts only under Q. The bridge detects a changed contrast but cannot attribute it uniquely to A, B, or their context.",
+      "contrasts": {
+        "historical": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 1.0001637229898181,
+          "logBias": 0.00016370958867222658,
+          "logRMSE": 0.09844052441585611,
+          "coverage95": {
+            "count": 94901,
+            "rate": 0.94901,
+            "mcSE": 0.0006956293546135038,
+            "mc95Wilson": [
+              0.9476292607380303,
+              0.9503562435186079
+            ]
+          },
+          "equivalence90": {
+            "count": 40495,
+            "rate": 0.40495,
+            "mcSE": 0.0015523063405784312,
+            "mc95Wilson": [
+              0.401911242890805,
+              0.40799605944189715
+            ]
+          },
+          "containsOne95": {
+            "count": 94901,
+            "rate": 0.94901,
+            "mcSE": 0.0006956293546135038,
+            "mc95Wilson": [
+              0.9476292607380303,
+              0.9503562435186079
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Unjustified historical lot-equivalence declaration"
+        },
+        "P": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 1.000087845780278,
+          "logBias": 0.00008784192206336905,
+          "logRMSE": 0.04699706717285903,
+          "coverage95": {
+            "count": 94912,
+            "rate": 0.94912,
+            "mcSE": 0.0006949188844750158,
+            "mc95Wilson": [
+              0.9477406488166863,
+              0.9504648469890672
+            ]
+          },
+          "equivalence90": {
+            "count": 99573,
+            "rate": 0.99573,
+            "mcSE": 0.00020619813529709711,
+            "mc95Wilson": [
+              0.9953063759229822,
+              0.9961155390124162
+            ]
+          },
+          "containsOne95": {
+            "count": 94912,
+            "rate": 0.94912,
+            "mcSE": 0.0006949188844750158,
+            "mc95Wilson": [
+              0.9477406488166863,
+              0.9504648469890672
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        },
+        "Q": {
+          "targetRatio": 2,
+          "expectedObservedRatio": 2,
+          "geometricMeanEstimate": 2.00036135905173,
+          "logBias": 0.0001806632052853141,
+          "logRMSE": 0.04699141541634377,
+          "coverage95": {
+            "count": 94911,
+            "rate": 0.94911,
+            "mcSE": 0.0006949835098763134,
+            "mc95Wilson": [
+              0.947730522554815,
+              0.9504549740192006
+            ]
+          },
+          "equivalence90": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "containsOne95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "False-equivalence rate for this contrast"
+        },
+        "interaction": {
+          "targetRatio": 2,
+          "expectedObservedRatio": 2,
+          "geometricMeanEstimate": 2.0001856511825,
+          "logBias": 0.0000928212832215225,
+          "logRMSE": 0.06007065505299554,
+          "coverage95": {
+            "count": 94865,
+            "rate": 0.94865,
+            "mcSE": 0.0006979482609764136,
+            "mc95Wilson": [
+              0.9472647302178054,
+              0.9500008016962738
+            ]
+          },
+          "equivalence90": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "containsOne95": {
+            "count": 0,
+            "rate": 0,
+            "mcSE": 0,
+            "mc95Wilson": [
+              0,
+              0.00003841311258303963
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "False-equivalence rate for this contrast"
+        }
+      }
+    },
+    {
+      "id": "boundary",
+      "name": "Exactly on the upper margin",
+      "theta": 1.25,
+      "method": 1,
+      "interaction": 1,
+      "reference": 1,
+      "sigma": 0.12,
+      "lesson": "Equality to an acceptance boundary is not equivalence. The rejection rate should be no more than about 5% under this model.",
+      "contrasts": {
+        "historical": {
+          "targetRatio": 1.25,
+          "expectedObservedRatio": 1.25,
+          "geometricMeanEstimate": 1.24945379677443,
+          "logBias": -0.00043705807642413497,
+          "logRMSE": 0.09778904665361882,
+          "coverage95": {
+            "count": 95042,
+            "rate": 0.95042,
+            "mcSE": 0.0006864533749643887,
+            "mc95Wilson": [
+              0.9490571886661779,
+              0.9517482072654829
+            ]
+          },
+          "equivalence90": {
+            "count": 4658,
+            "rate": 0.04658,
+            "mcSE": 0.0006664105611408031,
+            "mc95Wilson": [
+              0.0452911855354723,
+              0.04790364901154251
+            ]
+          },
+          "containsOne95": {
+            "count": 43412,
+            "rate": 0.43412,
+            "mcSE": 0.0015673539026014513,
+            "mc95Wilson": [
+              0.43105063141562766,
+              0.4371944298960864
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "Unjustified historical lot-equivalence declaration"
+        },
+        "P": {
+          "targetRatio": 1.25,
+          "expectedObservedRatio": 1.25,
+          "geometricMeanEstimate": 1.2498201451832516,
+          "logBias": -0.0001438942056734005,
+          "logRMSE": 0.04678267558988007,
+          "coverage95": {
+            "count": 95030,
+            "rate": 0.9503,
+            "mcSE": 0.0006872402054594883,
+            "mc95Wilson": [
+              0.948935651332498,
+              0.9516297538183098
+            ]
+          },
+          "equivalence90": {
+            "count": 4960,
+            "rate": 0.0496,
+            "mcSE": 0.000686584590564047,
+            "mc95Wilson": [
+              0.04827153482448138,
+              0.05096306770733343
+            ]
+          },
+          "containsOne95": {
+            "count": 634,
+            "rate": 0.00634,
+            "mcSE": 0.00025099411148471197,
+            "mc95Wilson": [
+              0.00586666768741344,
+              0.006851258346902049
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "False-equivalence rate for this contrast"
+        },
+        "Q": {
+          "targetRatio": 1.25,
+          "expectedObservedRatio": 1.25,
+          "geometricMeanEstimate": 1.2500517987741375,
+          "logBias": 0.00004143816073748363,
+          "logRMSE": 0.0468027203684375,
+          "coverage95": {
+            "count": 94995,
+            "rate": 0.94995,
+            "mcSE": 0.0006895288065048482,
+            "mc95Wilson": [
+              0.9485811798282128,
+              0.9512842522117738
+            ]
+          },
+          "equivalence90": {
+            "count": 4912,
+            "rate": 0.04912,
+            "mcSE": 0.0006834268475850213,
+            "mc95Wilson": [
+              0.04779774145431536,
+              0.05047689795408752
+            ]
+          },
+          "containsOne95": {
+            "count": 644,
+            "rate": 0.00644,
+            "mcSE": 0.0002529530865595437,
+            "mc95Wilson": [
+              0.005962827373481904,
+              0.006955090978211068
+            ]
+          },
+          "truthInsideMargins": false,
+          "equivalenceMeaning": "False-equivalence rate for this contrast"
+        },
+        "interaction": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 1.0001853495415167,
+          "logBias": 0.00018533236641276495,
+          "logRMSE": 0.05971710063792511,
+          "coverage95": {
+            "count": 95091,
+            "rate": 0.95091,
+            "mcSE": 0.0006832288920998582,
+            "mc95Wilson": [
+              0.9495534888243454,
+              0.9522318694624651
+            ]
+          },
+          "equivalence90": {
+            "count": 94423,
+            "rate": 0.94423,
+            "mcSE": 0.0007256700841291447,
+            "mc95Wilson": [
+              0.9427905734662586,
+              0.9456352980197359
+            ]
+          },
+          "containsOne95": {
+            "count": 95091,
+            "rate": 0.95091,
+            "mcSE": 0.0006832288920998582,
+            "mc95Wilson": [
+              0.9495534888243454,
+              0.9522318694624651
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        }
+      }
+    },
+    {
+      "id": "imprecise",
+      "name": "Equal lots, noisy assay",
+      "theta": 1,
+      "method": 1,
+      "interaction": 1,
+      "reference": 1,
+      "sigma": 0.45,
+      "lesson": "A confidence interval containing 1 is not positive evidence of equivalence. Low precision often leaves both questions unresolved.",
+      "contrasts": {
+        "historical": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 0.9996998789632685,
+          "logBias": -0.00030016608206278423,
+          "logRMSE": 0.1815776402010183,
+          "coverage95": {
+            "count": 94961,
+            "rate": 0.94961,
+            "mcSE": 0.0006917430729685701,
+            "mc95Wilson": [
+              0.9482368536096805,
+              0.9509486045512227
+            ]
+          },
+          "equivalence90": {
+            "count": 454,
+            "rate": 0.00454,
+            "mcSE": 0.00021258853214602147,
+            "mc95Wilson": [
+              0.004141939846567368,
+              0.004976124474953418
+            ]
+          },
+          "containsOne95": {
+            "count": 94961,
+            "rate": 0.94961,
+            "mcSE": 0.0006917430729685701,
+            "mc95Wilson": [
+              0.9482368536096805,
+              0.9509486045512227
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Unjustified historical lot-equivalence declaration"
+        },
+        "P": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 1.000292438653,
+          "logBias": 0.0002923959011517686,
+          "logRMSE": 0.15995813859221877,
+          "coverage95": {
+            "count": 94983,
+            "rate": 0.94983,
+            "mcSE": 0.0006903113145530793,
+            "mc95Wilson": [
+              0.9484596509637981,
+              0.9511657902953354
+            ]
+          },
+          "equivalence90": {
+            "count": 1723,
+            "rate": 0.01723,
+            "mcSE": 0.00041149881044785536,
+            "mc95Wilson": [
+              0.016441824162170555,
+              0.01805526523455287
+            ]
+          },
+          "containsOne95": {
+            "count": 94983,
+            "rate": 0.94983,
+            "mcSE": 0.0006903113145530793,
+            "mc95Wilson": [
+              0.9484596509637981,
+              0.9511657902953354
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        },
+        "Q": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 1.000293666906934,
+          "logBias": 0.00029362379524807157,
+          "logRMSE": 0.16014733821271987,
+          "coverage95": {
+            "count": 95057,
+            "rate": 0.95057,
+            "mcSE": 0.0006854682713298988,
+            "mc95Wilson": [
+              0.9492091134006941,
+              0.9518962710070329
+            ]
+          },
+          "equivalence90": {
+            "count": 1725,
+            "rate": 0.01725,
+            "mcSE": 0.0004117333785351875,
+            "mc95Wilson": [
+              0.016461363796803324,
+              0.01807572406339561
+            ]
+          },
+          "containsOne95": {
+            "count": 95057,
+            "rate": 0.95057,
+            "mcSE": 0.0006854682713298988,
+            "mc95Wilson": [
+              0.9492091134006941,
+              0.9518962710070329
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        },
+        "interaction": {
+          "targetRatio": 1,
+          "expectedObservedRatio": 1,
+          "geometricMeanEstimate": 1.0000012278948502,
+          "logBias": 0.0000012278940963051588,
+          "logRMSE": 0.2249256321535521,
+          "coverage95": {
+            "count": 94985,
+            "rate": 0.94985,
+            "mcSE": 0.0006901809726441321,
+            "mc95Wilson": [
+              0.9484799056254276,
+              0.9511855340971815
+            ]
+          },
+          "equivalence90": {
+            "count": 38,
+            "rate": 0.00038,
+            "mcSE": 0.00006163242653019594,
+            "mc95Wilson": [
+              0.00027688183204935583,
+              0.0005215020865681208
+            ]
+          },
+          "containsOne95": {
+            "count": 94985,
+            "rate": 0.94985,
+            "mcSE": 0.0006901809726441321,
+            "mc95Wilson": [
+              0.9484799056254276,
+              0.9511855340971815
+            ]
+          },
+          "truthInsideMargins": true,
+          "equivalenceMeaning": "Power for this conditional endpoint contrast"
+        }
+      }
+    }
+  ],
+  "cells": {
+    "draws": 100000,
+    "parameters": "Independent log-uniform ranges; K 0.3–3 nM, rho 30,000–300,000 sites, retained p 0.2–1, density retention 0.2–1, cells 50,000–1,000,000, volume 50–200 µL, tracer 0.3–10 nM, S50 1,000–30,000 occupied sites.",
+    "scope": "Each draw compares initially matched Raji and engineered cells; Raji is held fixed. p and density retention apply only to the engineered after-state. Competition and reporter use negligible depletion, equal before/after tracer, and h=1; they are separate regimes from the finite-supply binding calculation. No avidity or genomic mechanism is simulated.",
+    "summaries": {
+      "plateauRatio": {
+        "q05": 0.06654619799893564,
+        "median": 0.20043814892170303,
+        "q95": 0.6022765418456506
+      },
+      "bindingNoDepletionRatio": {
+        "q05": 1,
+        "median": 1,
+        "q95": 1
+      },
+      "bindingFiniteSupplyRatio": {
+        "q05": 0.5111144156069934,
+        "median": 0.887391360295704,
+        "q95": 0.9867646521317152
+      },
+      "competitionRatio": {
+        "q05": 1,
+        "median": 1,
+        "q95": 1
+      },
+      "reporterRatio": {
+        "q05": 0.26869393899952826,
+        "median": 0.5508034008102587,
+        "q95": 0.9382481260919995
+      }
+    }
+  },
+  "shapeCounterexample": [
+    {
+      "responseFraction": 0.2,
+      "doseA": 0.25,
+      "doseB": 0.5,
+      "doseRatioBA": 2
+    },
+    {
+      "responseFraction": 0.5,
+      "doseA": 1,
+      "doseB": 1,
+      "doseRatioBA": 1
+    },
+    {
+      "responseFraction": 0.8,
+      "doseA": 4.000000000000001,
+      "doseB": 2,
+      "doseRatioBA": 0.4999999999999999
+    }
+  ]
+}

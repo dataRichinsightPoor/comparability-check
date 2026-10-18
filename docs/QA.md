@@ -1,11 +1,27 @@
 # Verification record
 
+## Version 0.5 public-release verification
+
+The latest user request authorizes public GitHub publication under MIT, superseding the earlier private-preview-only scope. This section records local verification of the release candidate; older private-review entries below are historical milestones, not the current publication instruction.
+
+- **Numerical suite:** 170/170 tests pass, including deterministic seeds, input rejection, equal-midpoint/unequal-slope counterexample, calibration, interaction/comparator drift, cell limits, asynchronous/synchronous equivalence, and cancellation.
+- **Executed simulations:** Four configurations, each with 100,000 iterations for six endpoint scenarios and 100,000 paired cell evaluations. There are 2.4 million endpoint experiments in total. The same-seed block-count checks reuse cell draws; they do not create new unique cell parameter sets.
+- **Calibration:** All 18 paired-contrast 95% coverage estimates in the primary run fall between 94.5% and 95.5%. This tests implementation under the stipulated data-generating distribution, not biological validity.
+- **Browser/CLI:** A 100,000-iteration browser run reproduced every decision-rate count in the primary CLI report. Across all numerical fields, the largest observed browser-versus-Node difference was less than 1e-16, reflecting floating-point math-library differences; cross-runtime bitwise identity is not promised.
+- **New control inventory:** Iteration selection, seed zero, block-count changes, run, cancel, invalid block count, JSON download, Markdown download, simulation-view settings roundtrip, and prior-article outbound link were exercised through real controls. The simulation settings/results export separately from the main model settings; the main settings preserve the selected view.
+- **Preview isolation:** A direct worker failed in an opaque-origin iframe. It was removed in favor of a cooperative generator runner shared with the CLI. The final runner completes and cancels in a sandboxed allow-scripts/allow-downloads iframe.
+- **Responsive inspection:** Simulation controls and results inspected at 1440px and 375px. No document-level horizontal overflow; wide results tables scroll inside labeled, keyboard-focusable regions. The complete assumptions remain visible, not line-clamped. No page JavaScript errors were observed in the final standalone run.
+- **Publication hygiene:** Tracked files and prior commit diffs were inspected for credential patterns and employer/patient material. Bundled inputs are synthetic; sources are public. MIT license and citation metadata are included.
+
+The reference calculations and independent-seed/run-count interpretation are in [SIMULATION-DESIGN.md](SIMULATION-DESIGN.md). Historical walkthrough checks remain documented below.
+
 ## Scope
 
 Verification concerns numerical implementation, input handling, and the browser interface. No biological validation or assay qualification is claimed.
 
 ## Browser QA inventory
 
+- **Guided walkthrough:** All eight steps; outline and mobile selector; previous/next/bottom-next boundaries; optional reveal and reset; restart; matched plot axes; numeric outputs; changing endpoint warnings; final functional boundary; preserved sandbox state during browsing; explicit after-state copy; source-cited handout export; schema 4 progress and schema 1–3 migration; malformed step rejection; desktop/mobile transitions.
 - **Claim audit:** All seven claims; same and mixed endpoints; historical/side-by-side/crossed designs; unknown/no/yes measurement declarations; matched versus changed cells; expression tracking; actionable navigation; report export; settings persistence. A complete checklist must not issue an empirical or causal result.
 - **Approximation audit:** High cell load with depletion disabled must expose a warning; enabling finite supply clears that approximation warning without claiming assay validation.
 - **Historical mode:** Default ratio 0.25, sensitivity slider, all three scenario buttons, EC50 edits, unit-label changes, invalid/zero input, recovery, and reset by settings import.
@@ -21,6 +37,18 @@ Verification concerns numerical implementation, input handling, and the browser 
 ## Automated verification
 
 Run `npm test` to execute the dependency-free Node.js model and rule suite. The GitHub Actions workflow repeats the suite and all three CLI smoke tests on each push and pull request.
+
+## Private preview 0.4.0 results
+
+The user requested the guided Raji-versus-engineered walkthrough and explicitly assigned the installment label “Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07.” The preview and repository remain private; numbering is not evidence of publication.
+
+- **Automated suite:** 159 tests cover the existing models plus all eight walkthrough steps, fixed antibody K, matched concentration axes, stated numerical outputs, no shared-state mutation, malformed progress settings, and synchronization of the repository handout with the downloadable report.
+- **Guidance:** Every step declares changes, fixed assumptions, an interpretation question, scoped conclusions, inference limits and a next measurement. Tracer competition is distinct from the final generic reporter, whose non-CD20 scope is visible before the curves.
+- **Interactions:** All outline steps, Previous/Next, bottom navigation, boundary disabling, restart, reveal/hide and reveal reset were exercised. Mobile selection and desktop–mobile–desktop transitions were checked.
+- **State isolation:** Browsing all eight steps left custom sandbox K and passage unchanged. Explicit “Copy after-state to sandbox” transferred only the selected cell-context parameters.
+- **Persistence:** Schema 4 retained walkthrough position; schema 3 migrated to the initial lesson step. An invalid step was rejected without changing the current state. Earlier schema migrations remain covered by the prior checks.
+- **Exports and identity:** The full Markdown handout contains all eight lessons, generated outputs, parameter settings and scientific references. Settings and report exports include the requested CCLX / No. 07 designation exactly once. The designation remains visible at mobile width.
+- **Visual and runtime:** Matched before/after plots and output tables were inspected at desktop and 375 px. No page-level or chart-level horizontal overflow was found across the eight mobile steps. Final browser checks reported no JavaScript errors.
 
 ## Private preview 0.3.0 results
 

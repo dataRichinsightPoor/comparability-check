@@ -13,14 +13,14 @@ export function applyContext(input,preset="custom"){
   $("context-preset").value=preset;
   updateContext();
 }
-export function redrawContext(){if(result)draw(result);}
-function draw(r){
+export function redrawContext(){if(result)renderContextChart(result);}
+export function renderContextChart(r,target="context-chart",options={}){
   const key={absolute:"binding",normalized:"normalized",competition:"competition",functional:"functional"}[r.settings.plot];
-  const W=Math.max(300,$("context-chart").clientWidth||680),compact=W<520,H=280,L=compact?52:86,R=32,T=compact?38:16,B=56;
+  const W=Math.max(280,$(target).clientWidth||680),compact=W<520,H=280,L=compact?52:86,R=32,T=compact?38:16,B=56;
   const logMin=Math.log10(r.doses[0]),logMax=Math.log10(r.doses.at(-1));
-  const vmax=key==="binding"?Math.ceil(Math.max(1,...Object.values(r.states).map(s=>s.scale))*2)/2:1;
+  const vmax=key==="binding"?(options.signalMax??Math.ceil(Math.max(1,...Object.values(r.states).map(s=>s.scale))*2)/2):1;
   const x=v=>L+(Math.log10(v)-logMin)/(logMax-logMin)*(W-L-R),y=v=>T+(vmax-v)/vmax*(H-T-B);
-  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Synthetic dose-response curves with the same antibody binding parameter in three cell contexts."><title>Cell context changes signal and endpoints</title>`;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Synthetic dose-response curves with the same antibody binding parameter in ${options.kinds?.length??3} cell contexts."><title>Cell context changes signal and endpoints</title>`;
   for(let i=0;i<=4;i++){
     const v=vmax*i/4;
     svg+=`<line class="axis" x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}"/><text x="${L-10}" y="${y(v)+4}" text-anchor="end">${f(v)}</text>`;
@@ -30,12 +30,13 @@ function draw(r){
     }
   }
   for(const [k,color,dash] of [["raji","var(--accent)",""],["initial","var(--muted)","6 4"],["current","var(--rust)",""]]){
+    if(options.kinds&&!options.kinds.includes(k))continue;
     const pts=r.curves[k].filter(v=>v[key]!==null);
     if(pts.length)svg+=`<path d="${pts.map((v,i)=>`${i?"L":"M"}${x(v.dose)},${y(v[key])}`).join(" ")}" fill="none" stroke="${color}" stroke-width="2.5" stroke-dasharray="${dash}"/>`;
   }
   const label=key==="binding"?"Signal / Raji saturation":key==="normalized"?"Fraction of own saturation":key==="competition"?"Fraction tracer blocked":"Fraction reporter inhibited";
   svg+=`<text x="${(L+W-R)/2}" y="${H-5}" text-anchor="middle">${compact?(r.settings.depletion?"Total nM (log scale)":"Nominal nM (log scale)"):`${r.settings.depletion?"Total added":"Nominal ≈ free"} antibody concentration · nM (log scale)`}</text>${compact?`<text x="${L}" y="16">${label}</text>`:`<text transform="translate(16 ${(T+H-B)/2}) rotate(-90)" text-anchor="middle">${label}</text>`}</svg>`;
-  $("context-chart").innerHTML=svg;
+  $(target).innerHTML=svg;
 }
 export function updateContext(){
   try{
@@ -64,7 +65,7 @@ export function updateContext(){
     const worst=Math.max(...Object.values(r.states).map(v=>v[diagnosticKey]));
     $("depletion-audit").hidden=s.depletion||worst<=.1;
     $("depletion-audit").textContent=`Approximation warning: finite-supply equations predict up to ${f(worst*100)}% ${diagnosticKey==="bindingDepletionFraction"?"ligand depletion at the binding midpoint":"tracer depletion before competition"} across these cell contexts. The current curves ignore this. Enable mass balance to check the consequence; 10% is a diagnostic heuristic, not an assay acceptance limit.`;
-    draw(r);
+    renderContextChart(r);
     $("context-caption").textContent=s.plot==="normalized"?"Overlapping self-normalized curves can conceal substantial loss of positive cells or accessible target. No noise is simulated, and no EC50 is fitted.":s.plot==="absolute"?"Signal is an arithmetic mean, scaled to the Raji reference saturation. A positive-only gate can conceal population loss; it does not remove ligand consumption by the full sample.":"Curves are normalized to each population's own unblocked baseline. Inspect absolute baseline signal as well as the normalized midpoint; a weak baseline can make a real assay uninterpretable.";
     const generic=s.plot==="functional";
     $("context-table").innerHTML=`<table><thead><tr><th>Cell context</th><th>Site load RT · nM</th><th>Binding EC50 · nM</th><th>Tracer IC50 · nM</th>${generic?"<th>Generic reporter IC50 · nM</th>":""}</tr></thead><tbody>${[["raji","Raji · fixed"],["initial","Engineered · P0"],["current",`Engineered · P${s.passage}`]].map(([k,label])=>{const v=r.states[k];return `<tr><td>${label}</td><td class="numeric">${f(v.rt)}</td><td class="numeric">${f(v.bindingEC50)}</td><td class="numeric">${f(v.competitionIC50)}</td>${generic?`<td class="numeric">${f(v.functionalIC50)}</td>`:""}</tr>`;}).join("")}</tbody></table>`;

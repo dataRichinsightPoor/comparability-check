@@ -1,15 +1,18 @@
-import {VERSION,historical,parseCSV,analyzeBridge,PRESETS} from "./model.mjs";
+import {VERSION,SERIES_LINE,historical,parseCSV,analyzeBridge,PRESETS} from "./model.mjs";
 import {contextSettings,applyContext,initializeContext} from "./context-ui.mjs";
 import {validateContext,CONTEXT_DEFAULTS} from "./context-model.mjs";
 import {redrawContext} from "./context-ui.mjs";
 import {auditSettings,applyAudit,initializeAudit} from "./audit-ui.mjs";
 import {validateAudit,AUDIT_DEFAULTS} from "./audit-model.mjs";
+import {walkthroughSettings,applyWalkthrough,initializeWalkthrough,redrawWalkthrough} from "./walkthrough-ui.mjs";
+import {validateWalkthrough} from "./walkthrough-model.mjs";
+import {initializeSimulation} from "./simulation-ui.mjs";
 const $=id=>document.getElementById(id);
 let view="audit", bridgeResult=null, historyResult=null;
 const f=x=>x===null?"Unavailable":(Math.abs(x)>=1000||Math.abs(x)<.01?x.toExponential(2):Number(x.toPrecision(3)).toString());
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function setView(v){
-  if(!["audit","history","context","bridge","methods"].includes(v))return;
+  if(!["audit","walkthrough","history","context","bridge","simulation","methods"].includes(v))return;
   view=v;
   document.querySelectorAll(".view").forEach(e=>e.hidden=e.id!==v);
   document.querySelectorAll("[data-view]").forEach(e=>e.setAttribute("aria-pressed",String(e.dataset.view===v)));
@@ -19,6 +22,7 @@ function redrawActive(){
   if(view==="history"&&historyResult)drawHistory(historyResult);
   if(view==="bridge"&&bridgeResult)drawBridge(bridgeResult);
   if(view==="context")redrawContext();
+  if(view==="walkthrough")redrawWalkthrough();
 }
 let resizeFrame;
 window.addEventListener("resize",()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(redrawActive);});
@@ -94,10 +98,11 @@ for(const id of ["csv","lower","upper","ilower","iupper"])$(id).addEventListener
 $("qualified").addEventListener("change",updateBridge);
 $("preset").addEventListener("change",()=>{$("csv").value=PRESETS[$("preset").value];$("qualified").checked=false;updateBridge();});
 function download(name,text,type){
+  if(type==="text/markdown"&&!text.includes(SERIES_LINE))text=text.replace(/^(# [^\n]+\n)/,`$1\n${SERIES_LINE}\n`);
   const url=URL.createObjectURL(new Blob([text],{type})),a=document.createElement("a");
   a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-function settings(){return {schemaVersion:3,modelVersion:VERSION,view,history:{earlier:$("earlier").value,later:$("later").value,unit:$("unit").value,log2Multiplier:$("multiplier").value},bridge:{csv:$("csv").value,...options()},context:contextSettings(),audit:auditSettings()};}
+function settings(){return {schemaVersion:4,modelVersion:VERSION,publication:SERIES_LINE,view,history:{earlier:$("earlier").value,later:$("later").value,unit:$("unit").value,log2Multiplier:$("multiplier").value},bridge:{csv:$("csv").value,...options()},context:contextSettings(),audit:auditSettings(),walkthrough:walkthroughSettings()};}
 $("export-settings").addEventListener("click",()=>download("comparability-check-settings.json",JSON.stringify(settings(),null,2),"application/json"));
 $("download-csv").addEventListener("click",()=>download("comparability-check-blocks.csv",$("csv").value,"text/csv"));
 $("import-settings").addEventListener("change",async e=>{
@@ -105,12 +110,12 @@ $("import-settings").addEventListener("change",async e=>{
     const file=e.target.files[0];if(!file)return;
     if(file.size>250000)throw new Error("Settings file is too large.");
     const s=JSON.parse(await file.text());
-    if(![1,2,3].includes(s.schemaVersion)||!s.history||!s.bridge)throw new Error("Unrecognized settings format.");
+    if(![1,2,3,4].includes(s.schemaVersion)||!s.history||!s.bridge)throw new Error("Unrecognized settings format.");
     const h=s.history,b=s.bridge;
     if(typeof h.unit!=="string"||h.unit.length>24)throw new Error("Invalid unit label.");
     for(const k of ["lower","upper","interactionLower","interactionUpper"])
       if(typeof b[k]!=="number"||!Number.isFinite(b[k]))throw new Error("Settings must include four finite numerical margins.");
-    if(!["audit","history","context","bridge","methods"].includes(s.view))throw new Error("Unrecognized view.");
+    if(!["audit","walkthrough","history","context","bridge","simulation","methods"].includes(s.view))throw new Error("Unrecognized view.");
     const exponent=Number(h.log2Multiplier);
     if(!Number.isFinite(exponent)||exponent < -4||exponent>4)throw new Error("Method slider must be between −4 and 4 in log2 units.");
     historical(Number(h.earlier),Number(h.later),2**exponent);
@@ -119,10 +124,12 @@ $("import-settings").addEventListener("change",async e=>{
     if(s.schemaVersion>=3&&(!s.audit||typeof s.audit!=="object"))throw new Error("Claim-audit settings are missing.");
     const cs=validateContext(s.schemaVersion>=2?s.context:CONTEXT_DEFAULTS);
     const au=validateAudit(s.schemaVersion>=3?s.audit:AUDIT_DEFAULTS);
+    if(s.schemaVersion>=4&&!s.walkthrough)throw new Error("Walkthrough state is missing.");
+    const walk=validateWalkthrough(s.schemaVersion>=4?s.walkthrough:{step:0});
     $("earlier").value=h.earlier;$("later").value=h.later;$("unit").value=h.unit;$("multiplier").value=exponent;
     $("csv").value=b.csv;
     for(const [id,key] of [["lower","lower"],["upper","upper"],["ilower","interactionLower"],["iupper","interactionUpper"]])$(id).value=b[key];
-    $("qualified").checked=false;$("preset").value="custom";applyContext(cs);applyAudit(au);updateHistory();updateBridge();setView(s.view);
+    $("qualified").checked=false;$("preset").value="custom";applyContext(cs);applyAudit(au);applyWalkthrough(walk);updateHistory();updateBridge();setView(s.view);
     $("file-status").textContent="Settings loaded. Reconfirm assay assumptions before making a conditional equivalence claim.";
   }catch(err){$("file-status").textContent=`Could not load settings: ${err.message}`;}
   e.target.value="";
@@ -136,5 +143,7 @@ $("download-report").addEventListener("click",()=>{
 // Stable test identifiers for the complete control surface.
 initializeContext(download);
 initializeAudit(download,setView);
+initializeWalkthrough(download,setView,applyContext);
+initializeSimulation(download);
 document.querySelectorAll("button,input,select,textarea,a").forEach((e,i)=>{e.dataset.testid=e.id||e.dataset.view||`control-${i}`;});
 updateHistory();updateBridge();
