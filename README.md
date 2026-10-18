@@ -6,6 +6,8 @@ Data-Rich, Insight-Poor CCLX · 99 Small Problems · No. 07
 
 An MIT-licensed, research-use model for comparing reported binding EC50 values without quietly turning a measurement difference into a lot effect. This numbered installment uses only synthetic examples and public literature.
 
+[Open the model](https://datarichinsightpoor.github.io/comparability-check/) · [Read the companion essay](docs/COMPANION-ARTICLE.md) · [Inspect the simulation findings](docs/SIMULATION-DESIGN.md)
+
 This research-use tool begins with a claim audit, offers a guided cell-context walkthrough, and separates three inferential problems:
 
 - **Claim audit:** Specify the intended conclusion, endpoint identities, design and declared evidence. Receive an unresolved-evidence checklist and a next discriminating measurement. It never evaluates raw data or converts declarations into proof.
