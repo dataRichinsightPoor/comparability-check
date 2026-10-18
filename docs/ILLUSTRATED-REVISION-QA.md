@@ -1,6 +1,6 @@
 # Illustrated revision QA
 
-Scope: private article revision, model algorithm unchanged. Public GitHub and Pages remain at v0.6.0 pending approval of the illustrated revision.
+Scope: illustrated edition v0.6.1, approved for GitHub and live-site publication. The numerical model remains v0.6.0 with unchanged algorithms.
 
 ## Inventory
 

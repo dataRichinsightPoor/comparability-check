@@ -1,6 +1,6 @@
 {
   "name": "comparability-check",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "private": true,
   "type": "module",
   "description": "A bounded model of what binding EC50 comparisons can and cannot establish.",

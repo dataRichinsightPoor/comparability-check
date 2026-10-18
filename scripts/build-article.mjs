@@ -47,9 +47,9 @@ const document=`<!doctype html><html lang="en"><head><meta charset="utf-8">
 <style>${css}</style></head><body>
 <a class="skip-link" href="#essay">Skip to article</a>
 <nav class="reading-tools" aria-label="Article tools"><a href="index.html">Open interactive model</a><div><button id="copy-article">Copy article</button><button id="select-article">Select article</button><a href="resources/to-be-or-not-to-be-comparable.md" download>Markdown</a></div></nav>
-<p id="copy-status" role="status">Private illustrated revision · Model v0.6.0 · Literature panels retain their stated licenses.</p>
+<p id="copy-status" role="status">Illustrated edition v0.6.1 · Numerical model v0.6.0 · Literature panels retain their stated licenses.</p>
 <article id="essay">${html}</article>
-<footer><p>Illustrated revision for review. The model, source code, and previously published release remain available through the links in the essay.</p><p>Copy includes embedded images and linked captions. Image and equation retention depends on the destination editor and should be checked after pasting.</p><a href="index.html#walkthrough">Continue with the guided cell-context walkthrough</a></footer>
+<footer><p>Published illustrated edition v0.6.1. The model, source code, and reproducible simulation results remain available through the links in the essay.</p><p>Copy includes embedded images and linked captions. Image and equation retention depends on the destination editor and should be checked after pasting.</p><a href="index.html#walkthrough">Continue with the guided cell-context walkthrough</a></footer>
 <script>${js}</script></body></html>`;
 await writeFile(resolve(root,"web/article.html"),document);
 console.log(`Built illustrated article: ${markdown.split(/\s+/).length} words, ${equations.length} math expressions, 3 figures.`);

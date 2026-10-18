@@ -149,7 +149,7 @@ Software tests verify implementation. They do not constitute biological validati
 
 ## Illustrated companion essay
 
-The private illustrated revision is available at `web/article.html`, with embedded
+The [published illustrated essay](https://datarichinsightpoor.github.io/comparability-check/article.html) is available at `web/article.html`, with embedded
 figures, rendered MathML equations, a rich-copy control, selection fallback, and
 links to the interactive model. Rebuild it with `npm ci && npm run build:article`.
 The model itself still runs without installing build dependencies.
@@ -159,3 +159,7 @@ Lee et al. retain CC BY 4.0, with attribution and crop details in
 [figure credits](web/resources/FIGURE-CREDITS.md). No third-party artwork is
 relicensed under MIT. Clipboard checks do not establish retention in a particular
 publishing editor.
+
+Release v0.6.1 publishes the illustrated essay and cross-article interpretation
+theme. The numerical model retains version 0.6.0; its algorithms, assumptions,
+and pinned v0.5.0 simulation results are unchanged.
