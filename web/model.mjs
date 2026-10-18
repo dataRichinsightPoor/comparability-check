@@ -1,5 +1,5 @@
 /**
- * Comparability Check v0.1.0
+ * Comparability Check v0.2.0
  * Model schema: history {earlier, later, methodMultiplier};
  * bridge [{run: string, AP, BP, AQ, BQ}], all EC50s positive in one common unit.
  * Complete rows are independent experimental blocks, NOT technical replicates.

@@ -24,7 +24,7 @@ Run `npm test` to execute the dependency-free Node.js numerical suite. The GitHu
 
 Verification completed on 2026-10-17. The results below describe software behavior, not scientific validation of an assay.
 
-- **Numerical suite:** 101/101 tests passed on Node.js 22. Tests include the historical confounding examples, Student t intervals, equivalence boundaries, CSV validation, zero-variation safeguards, expression trajectories, gating, ligand mass balance, analytic midpoint limits, and generic response-reserve behavior.
+- **Numerical suite:** 101/101 tests passed on Node.js 20.20.2. Tests include the historical confounding examples, Student t intervals, equivalence boundaries, CSV validation, zero-variation safeguards, expression trajectories, gating, ligand mass balance, analytic midpoint limits, and generic response-reserve behavior.
 - **Independent numerical cross-check:** Forty Student t quantiles were compared against SciPy, over degrees of freedom 1, 2, 3, 5, 10, 30, 100, and 999, and probabilities 0.9, 0.95, 0.975, 0.99, and 0.999. Maximum absolute error was 1.74e−11.
 - **CLI:** Historical, paired bridge, and cell-context smoke tests completed. Source syntax checks and `git diff --check` passed.
 - **Functional browser checks:** All four views, all synthetic scenarios, historical sensitivity controls, equal/zero EC50 handling, cell-context parameters, gate changes, passage endpoints, all loss patterns, depletion toggling, invalid tracer input, all bridge presets, one-block/zero-variation/missing-cell handling, qualification behavior, report/CSV downloads, settings round-trip, and malformed settings rejection were exercised.
